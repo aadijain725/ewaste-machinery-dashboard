@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+
+<h2>Search E-Waste Data</h2>
+<p class="note">Full-text search across categories, machines, and configurations. Use keywords like "copper", "shredder", "gold recovery".</p>
+
+<form method="get" action="/search" style="margin:16px 0">
+  <input type="text" name="q" class="search-box" placeholder="Search categories, machines, configurations..." value="{{ query }}" autofocus>
+</form>
+
+{% if query %}
+<p class="note" style="margin-bottom:16px">
+  {% if results %}{{ results|length }} results for "<strong>{{ query }}</strong>"
+  {% else %}No results for "<strong>{{ query }}</strong>". Try different keywords.{% endif %}
+</p>
+
+{% for r in results %}
+<div class="result-item">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+    <span class="result-type" style="
+      {% if r.entity_type == 'category' %}background:rgba(59,130,246,0.15);color:var(--accent)
+      {% elif r.entity_type == 'machine' %}background:rgba(34,197,94,0.15);color:var(--green)
+      {% else %}background:rgba(168,85,247,0.15);color:var(--purple){% endif %}">
+      {{ r.entity_type }}
+    </span>
+    <strong style="font-size:14px">{{ r.title }}</strong>
+  </div>
+  <div class="note">{{ r.content[:300] }}{% if r.content|length > 300 %}...{% endif %}</div>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="card" style="margin-top:24px">
+  <h3>API Access</h3>
+  <p class="note">Programmatic access to all data:</p>
+  <table>
+    <tr><th>Endpoint</th><th>Description</th></tr>
+    <tr><td><code><a href="/api/categories">/api/categories</a></code></td><td>All categories with material composition</td></tr>
+    <tr><td><code><a href="/api/machines">/api/machines</a></code></td><td>All 21 CPCB machines with specs</td></tr>
+    <tr><td><code><a href="/api/economics">/api/economics</a></code></td><td>Revenue, costs, configurations</td></tr>
+    <tr><td><code>/api/search?q=term</code></td><td>Full-text search (JSON)</td></tr>
+  </table>
+</div>
+
+{% endblock %}

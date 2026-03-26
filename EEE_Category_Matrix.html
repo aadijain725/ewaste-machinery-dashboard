@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EEE Category Comparison Matrix — E-Waste Plant</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d27;--card2:#222533;--border:#2a2d3a;--text:#e4e4e7;--text2:#9ca3af;--accent:#3b82f6;--green:#22c55e;--amber:#f59e0b;--red:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);padding:20px;max-width:800px;margin:0 auto}
+h1{font-size:28px;color:#fff;margin-bottom:4px}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:24px}
+.back-link{display:inline-block;color:var(--accent);text-decoration:none;font-size:13px;margin-bottom:16px}
+.back-link:hover{text-decoration:underline}
+
+.cat{border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;margin:0 0 10px;cursor:pointer;transition:background .15s}
+.cat:hover{background:var(--card)}
+.cat.active{border-color:var(--accent);background:rgba(59,130,246,0.12)}
+.cat-top{display:flex;justify-content:space-between;align-items:center}
+.cat-name{font-size:14px;font-weight:500}
+.cat-tag{font-size:11px;padding:2px 8px;border-radius:8px}
+.cat-desc{font-size:12px;color:var(--text2);margin:4px 0 0}
+.detail{display:none;margin:16px 0 0;padding:16px;background:var(--card);border-radius:12px}
+.detail.show{display:block}
+.bars{margin:10px 0}
+.bar-row{display:flex;align-items:center;gap:8px;margin:0 0 6px}
+.bar-label{font-size:12px;color:var(--text2);min-width:50px;text-align:right}
+.bar-track{flex:1;height:16px;background:#1e2130;border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .3s}
+.bar-val{font-size:11px;font-weight:500;min-width:50px}
+.mach-list{font-size:12px;color:var(--text2);line-height:1.7;margin:8px 0 0}
+.mach-extra{color:var(--amber);font-weight:500}
+.sect{font-size:12px;font-weight:500;color:var(--text2);margin:12px 0 4px;text-transform:uppercase;letter-spacing:0.3px}
+.rev-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
+.rev-row .v{font-weight:500}
+.total-row{border-top:0.5px solid var(--border);padding-top:6px;margin-top:6px;font-weight:500;display:flex;justify-content:space-between;font-size:14px}
+.note{font-size:11px;color:#6b7280;margin-top:8px;line-height:1.5}
+.footer{text-align:center;color:var(--text2);font-size:12px;margin-top:32px}
+</style>
+</head>
+<body>
+<a class="back-link" href="index.html">&larr; Back to Research Hub</a>
+<h1>EEE Category Comparison Matrix</h1>
+<p class="subtitle">Click each category to see metal yield, machinery requirements, and revenue per tonne</p>
+<div id="cats"></div>
+<div id="detail" class="detail"></div>
+<div class="footer">
+E-Waste Recycling Plant Project — March 2026<br>
+Config 2 targeting 330 TPA | Haryana/UP
+</div>
+<script>
+const cats=[
+{id:'itew',name:'ITEW: IT & Telecom Equipment',codes:'ITEW 1-16',items:'Laptops, desktops, servers, phones, printers, networking, tablets',
+ au:0.0004,cu:3,al:11,fe:5,plastic:30,
+ supply:'High — corporate bulk, kabadiwala, auction',volume:'Largest e-waste stream in India',
+ extraMach:'Data destruction (degausser/wiper) mandatory for corporate',
+ machTrigger:'Core 10 items + #13 (data wipe). No compressor/CRT/refrigerant needed.',
+ tag:'Highest precious metal',tagColor:'rgba(245,158,11,0.12)',tagText:'#f59e0b',
+ notes:'PCBs from servers and motherboards have highest gold density. Mobile phone PCBs are premium (Rs 400-600/kg). CPU pins from older models extremely gold-rich. This category drives the gold certificate market.'},
+{id:'ceew',name:'CEEW: Consumer Electronics & PV',codes:'CEEW 1-19',items:'TVs (LCD/LED/CRT), refrigerators, ACs, washing machines, solar panels, audio',
+ au:0.00015,cu:5,al:8,fe:20,plastic:25,
+ supply:'Medium — household collection, scrap dealers, municipal',volume:'Second largest, growing with solar PV',
+ extraMach:'CRT cutting (#10), compressor cutting (#7), refrigerant recovery (#8), oil recovery (#9)',
+ machTrigger:'Core 10 + #7,#8,#9,#10. Triggers most expensive Annexure 1 items.',
+ tag:'Heavy machinery needed',tagColor:'rgba(239,68,68,0.12)',tagText:'#ef4444',
+ notes:'Highest iron content (steel chassis from fridges/TVs/ACs). Good for Fe certificates. But triggers compressor + CRT + refrigerant machinery (Rs 15-50L extra). Solar PV is a growing sub-category with silver recovery potential. CPCB min certificate price: Rs 22/kg.'},
+{id:'lseew',name:'LSEEW: Large & Small Equipment',codes:'LSEEW 1-34',items:'Large household (dishwashers, ovens), small (vacuum, toasters, clocks, fans)',
+ au:0.0001,cu:4,al:6,fe:25,plastic:35,
+ supply:'Medium — mixed with CEEW in practice',volume:'Broad category, variable composition',
+ extraMach:'Similar to CEEW for large items; small items are simpler',
+ machTrigger:'Core 10 + possibly #7,#8 for large appliances with compressors.',
+ tag:'Highest iron yield',tagColor:'rgba(26,29,39,1)',tagText:'#9ca3af',
+ notes:'Highest ferrous content overall. Small EEE (fans, irons, toasters) are easier to process — no compressors, no CRT, no refrigerant. Consider registering for small LSEEW only to avoid triggering heavy machinery while still capturing Fe/Cu certificates.'},
+{id:'eetw',name:'EETW: Electrical & Electronic Tools',codes:'EETW 1-8',items:'Drills, saws, sewing machines, soldering irons, lawnmowers',
+ au:0.00005,cu:8,al:4,fe:30,plastic:20,
+ supply:'Low — niche, industrial sources',volume:'Small volume nationally',
+ extraMach:'None beyond core — simple electromechanical devices',
+ machTrigger:'Core 10 items only. No special machinery triggered.',
+ tag:'High copper, simple processing',tagColor:'rgba(59,130,246,0.12)',tagText:'#3b82f6',
+ notes:'Electric motors = high copper content (windings). Simple steel housings. No hazardous components like CRT or refrigerant. Easy to process but low volume in market — hard to source enough raw material. Good as an add-on category, not standalone.'},
+{id:'tlsew',name:'TLSEW: Toys, Leisure & Sports',codes:'TLSEW 1-6',items:'Electric trains, video games, slot machines, sports equipment with electronics',
+ au:0.00008,cu:2,al:3,fe:8,plastic:50,
+ supply:'Very low',volume:'Negligible in India currently',
+ extraMach:'None — simple electronics in plastic housings',
+ machTrigger:'Core 10 items only.',
+ tag:'Low value, high plastic',tagColor:'rgba(26,29,39,1)',tagText:'#9ca3af',
+ notes:'Mostly plastic with small PCBs. Very low metal recovery per tonne. Not viable as primary category. Add only if collecting mixed e-waste that includes these.'},
+{id:'mdw',name:'MDW: Medical Devices',codes:'MDW 1-10',items:'Radiotherapy, dialysis, cardiology, lab analyzers, ventilators, nuclear medicine',
+ au:0.0003,cu:6,al:5,fe:15,plastic:20,
+ supply:'Niche — hospital auctions, refurbishers',volume:'Growing with healthcare expansion',
+ extraMach:'May need specialized decontamination protocols',
+ machTrigger:'Core 10 + decontamination/sterilization area.',
+ tag:'High value, restricted supply',tagColor:'rgba(34,197,94,0.12)',tagText:'#22c55e',
+ notes:'Medical equipment often has high-quality PCBs with precious metals. Regulated supply — hospitals must channel through authorized entities. Premium pricing from hospitals/corporate. Specialized handling requirements (biohazard decontamination) add cost but also barrier to competition.'},
+{id:'liw',name:'LIW: Laboratory Instruments',codes:'LIW 1-2',items:'Measuring, control, laboratory equipment',
+ au:0.0002,cu:5,al:4,fe:10,plastic:25,
+ supply:'Very niche — research institutions, universities',volume:'Small',
+ extraMach:'None beyond core',
+ machTrigger:'Core 10 items only.',
+ tag:'Niche but decent metals',tagColor:'rgba(26,29,39,1)',tagText:'#9ca3af',
+ notes:'Precision instruments often contain quality copper and gold-plated connectors. Small volume but good metal density. Add-on category for institutions.'}
+];
+
+function renderCats(){
+  const el=document.getElementById('cats');
+  el.innerHTML=cats.map(c=>`<div class="cat" id="c-${c.id}" onclick="toggle('${c.id}')"><div class="cat-top"><div><span class="cat-name">${c.name}</span><span class="cat-tag" style="background:${c.tagColor};color:${c.tagText};margin-left:8px">${c.tag}</span></div><span style="font-size:12px;color:#6b7280">${c.codes}</span></div><div class="cat-desc">${c.items}</div></div>`).join('');
+}
+
+function toggle(id){
+  const c=cats.find(x=>x.id===id);
+  document.querySelectorAll('.cat').forEach(e=>e.classList.remove('active'));
+  document.getElementById('c-'+id).classList.add('active');
+  const d=document.getElementById('detail');
+  d.classList.add('show');
+  const maxCu=8,maxAl=11,maxFe=30,maxAu=0.0004;
+  const tonne=1000;
+  const auKg=(c.au/100)*tonne;const cuKg=(c.cu/100)*tonne;const alKg=(c.al/100)*tonne;const feKg=(c.fe/100)*tonne;
+  const auRev=auKg*1000*7.5;const cuRev=cuKg*700;const alRev=alKg*175;const feRev=feKg*28;
+  const certRev=(cuKg+alKg+feKg)*15;
+  const totalRev=auRev+cuRev+alRev+feRev+certRev;
+  d.innerHTML=`
+    <div class="sect">Recoverable metal per tonne of e-waste</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-label">Gold</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c.au/maxAu*100)}%;background:#BA7517"></div></div><span class="bar-val">${c.au}% = ${auKg.toFixed(1)}g</span></div>
+      <div class="bar-row"><span class="bar-label">Copper</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c.cu/maxCu*100)}%;background:#D85A30"></div></div><span class="bar-val">${c.cu}% = ${cuKg.toFixed(0)}kg</span></div>
+      <div class="bar-row"><span class="bar-label">Alum.</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c.al/maxAl*100)}%;background:#378ADD"></div></div><span class="bar-val">${c.al}% = ${alKg.toFixed(0)}kg</span></div>
+      <div class="bar-row"><span class="bar-label">Iron</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c.fe/maxFe*100)}%;background:#888780"></div></div><span class="bar-val">${c.fe}% = ${feKg.toFixed(0)}kg</span></div>
+      <div class="bar-row"><span class="bar-label">Plastic</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c.plastic/50*100)}%;background:#5DCAA5"></div></div><span class="bar-val">${c.plastic}%</span></div>
+    </div>
+    <div class="sect">Estimated revenue per tonne processed</div>
+    <div class="rev-row"><span>Gold scrap (${auKg.toFixed(1)}g x Rs 7,500/g)</span><span class="v">Rs ${Math.round(auRev).toLocaleString()}</span></div>
+    <div class="rev-row"><span>Copper scrap (${cuKg.toFixed(0)}kg x Rs 700/kg)</span><span class="v">Rs ${Math.round(cuRev).toLocaleString()}</span></div>
+    <div class="rev-row"><span>Aluminium scrap (${alKg.toFixed(0)}kg x Rs 175/kg)</span><span class="v">Rs ${Math.round(alRev).toLocaleString()}</span></div>
+    <div class="rev-row"><span>Iron scrap (${feKg.toFixed(0)}kg x Rs 28/kg)</span><span class="v">Rs ${Math.round(feRev).toLocaleString()}</span></div>
+    <div class="rev-row"><span>EPR certificates (Cu+Al+Fe @ Rs 15/kg avg)</span><span class="v">Rs ${Math.round(certRev).toLocaleString()}</span></div>
+    <div class="total-row"><span>Total revenue per tonne</span><span>Rs ${Math.round(totalRev).toLocaleString()}</span></div>
+    <div class="sect">Supply & machinery</div>
+    <div style="font-size:13px;line-height:1.6">
+      <div class="rev-row"><span>Supply availability</span><span class="v">${c.supply}</span></div>
+      <div class="rev-row"><span>Market volume</span><span class="v">${c.volume}</span></div>
+    </div>
+    <div class="mach-list"><span style="font-weight:500">Machinery triggered:</span> ${c.machTrigger}</div>
+    <div class="mach-list"><span class="mach-extra">Extra requirement:</span> ${c.extraMach}</div>
+    <div class="note">${c.notes}</div>
+  `;
+}
+renderCats();
+toggle('itew');
+</script>
+</body>
+</html>

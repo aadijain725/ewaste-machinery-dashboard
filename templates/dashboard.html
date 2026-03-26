@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+
+<div class="stat-grid">
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--green)">{{ categories|length }}</div>
+    <div class="stat-label">EPR Categories</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">{{ total_machines }}</div>
+    <div class="stat-label">CPCB Machines</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">{{ configs|length }}</div>
+    <div class="stat-label">Configurations</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--green)">Rs {{ "{:,.0f}".format(revenue_per_tonne) }}</div>
+    <div class="stat-label">Revenue / Tonne (Config 2)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--red)">Rs {{ "{:,.0f}".format(cost_min) }}-{{ "{:,.0f}".format(cost_max) }}</div>
+    <div class="stat-label">Cost / Tonne (Config 2)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--green)">Rs {{ "{:,.0f}".format(margin_min) }}-{{ "{:,.0f}".format(margin_max) }}</div>
+    <div class="stat-label">Gross Margin / Tonne</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <!-- Categories Overview -->
+  <div class="card">
+    <h3>EPR Categories by Priority</h3>
+    <table>
+      <tr><th>Category</th><th>EPR Range/T</th><th>Priority</th></tr>
+      {% for cat in categories %}
+      <tr>
+        <td><strong>{{ cat.name }}</strong><br><span class="note">{{ cat.full_name }}</span></td>
+        <td>Rs {{ "{:,}".format(cat.epr_min_per_tonne) }} — {{ "{:,}".format(cat.epr_max_per_tonne) }}</td>
+        <td>
+          {% if cat.priority == 1 %}
+            <span class="badge badge-amber">Essential</span>
+          {% elif cat.priority == 2 %}
+            <span class="badge badge-blue">Recommended</span>
+          {% elif cat.priority == 3 %}
+            <span class="badge badge-purple">Supplementary</span>
+          {% else %}
+            <span class="badge badge-red">Skip Phase 1</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <!-- Configurations -->
+  <div class="card">
+    <h3>Plant Configurations</h3>
+    {% for cfg in configs %}
+    <div style="padding:12px;margin:8px 0;background:var(--card2);border-radius:8px;border:1px solid {% if cfg.recommended %}var(--green){% else %}var(--border){% endif %}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <strong>{{ cfg.display_name }}</strong>
+        {% if cfg.recommended %}<span class="badge badge-green">RECOMMENDED</span>{% endif %}
+      </div>
+      <div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">
+        Rs {{ cfg.price_min_lakhs }}L — {{ cfg.price_max_lakhs }}L
+      </div>
+      <div class="note">Target: {{ cfg.target_tpa }} TPA</div>
+      <div class="note">{{ cfg.description[:150] }}{% if cfg.description|length > 150 %}...{% endif %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Sourcing Profile -->
+<div class="card">
+  <h3>Kabadiwala Sourcing Profile (Day 1 Reality)</h3>
+  <div class="callout">If you can only process ITEW, you reject 60-70% of what walks through your door. Kabadiwalas sell the whole lot or nothing.</div>
+  {% for s in sourcing %}
+  <div class="bar-row">
+    <span class="bar-label">{{ s.cat_name or 'Mixed/Other' }}</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:{{ s.percentage * 2.5 }}%;background:{% if s.percentage >= 20 %}var(--accent){% elif s.percentage >= 10 %}var(--amber){% else %}var(--text2){% endif %}">
+        {{ s.percentage }}%
+      </div>
+    </div>
+    <span class="bar-val">{{ s.notes[:40] }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Waste Plant Machinery Deep Dive — Ghaziabad Visit Prep</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d27;--card2:#222533;--border:#2a2d3a;--text:#e4e4e7;--text2:#9ca3af;--accent:#3b82f6;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--purple:#a855f7;--teal:#14b8a6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:20px;max-width:1200px;margin:0 auto}
+h1{font-size:28px;margin:0 0 6px;color:#fff}
+h2{font-size:20px;margin:30px 0 14px;color:#fff;border-bottom:1px solid var(--border);padding-bottom:8px}
+h3{font-size:16px;margin:20px 0 10px;color:var(--accent)}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin:12px 0}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.badge-green{background:rgba(34,197,94,0.15);color:var(--green)}
+.badge-amber{background:rgba(245,158,11,0.15);color:var(--amber)}
+.badge-red{background:rgba(239,68,68,0.15);color:var(--red)}
+.badge-blue{background:rgba(59,130,246,0.15);color:var(--accent)}
+.badge-purple{background:rgba(168,85,247,0.15);color:var(--purple)}
+.badge-teal{background:rgba(20,184,166,0.15);color:var(--teal)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+th{background:var(--card2);color:var(--text2);text-align:left;padding:10px 12px;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:0.5px}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.highlight{background:rgba(59,130,246,0.08)}
+.machine-card{cursor:pointer;transition:all 0.2s}
+.machine-card:hover{border-color:var(--accent);background:var(--card2)}
+.machine-card.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.detail-panel{display:none;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px;margin:8px 0 16px}
+.detail-panel.show{display:block}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.stat-val{font-size:24px;font-weight:700;color:#fff}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px}
+.flow-arrow{text-align:center;color:var(--text2);font-size:20px;padding:8px 0}
+.tab-bar{display:flex;gap:4px;margin:16px 0 12px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--text2);transition:all 0.2s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tab:hover:not(.active){background:var(--card2)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.callout{border-left:3px solid var(--amber);background:rgba(245,158,11,0.08);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px}
+.callout-blue{border-left-color:var(--accent);background:rgba(59,130,246,0.08)}
+.callout-green{border-left-color:var(--green);background:rgba(34,197,94,0.08)}
+.callout-red{border-left-color:var(--red);background:rgba(239,68,68,0.08)}
+.progress-bar{height:8px;background:var(--card);border-radius:4px;overflow:hidden;margin:4px 0}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.3s}
+.config-compare{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.config-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.config-col.recommended{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.config-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.config-price{font-size:20px;font-weight:700;color:var(--green);margin-bottom:12px}
+.check-list{list-style:none;font-size:12px;color:var(--text2)}
+.check-list li{padding:3px 0}
+.check-list li::before{content:'✓ ';color:var(--green);font-weight:700}
+.check-list li.no::before{content:'✗ ';color:var(--red)}
+.layout-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,60px);gap:4px;margin:12px 0}
+.zone{border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;text-align:center;padding:4px;line-height:1.2}
+.note{font-size:12px;color:var(--text2);margin:8px 0;line-height:1.5}
+.spacer{height:20px}
+@media(max-width:768px){.grid-2,.grid-3,.config-compare{grid-template-columns:1fr}.layout-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<h1>E-Waste Plant Machinery Deep Dive</h1>
+<p class="subtitle">Preparation for Ghaziabad supplier visit — March 2026 | Targeting 330-660 TPA | 500 sqm plots in Haryana/UP</p>
+
+<!-- =========== SECTION 1: THE 21 MACHINES =========== -->
+<h2>1. The 21 CPCB Annexure 1 Machines — What Each One Actually Does</h2>
+<p class="note">CPCB mandates these as "minimum machinery" for a recycler. But not all are needed for every EPR category. Understanding each machine lets you pick configurations intelligently.</p>
+
+<div class="tab-bar" id="machTabs">
+<div class="tab active" onclick="showMachGroup('core')">Core Processing (1-6)</div>
+<div class="tab" onclick="showMachGroup('appliance')">Appliance Line (7-10)</div>
+<div class="tab" onclick="showMachGroup('special')">Specialized (11-15)</div>
+<div class="tab" onclick="showMachGroup('support')">Support Infrastructure (16-21)</div>
+</div>
+
+<div id="machContent">
+<!-- Core Processing -->
+<div class="tab-content active" id="mach-core">
+<div class="card machine-card" onclick="toggleDetail('m1')">
+<div class="card-header">
+<div><strong>1. Dismantling Tables</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 55K each (JewelTech) / Rs 3.8L set (Purva)</div>
+</div>
+<div class="note">4'×6' workstations with suction hoods connected to cyclone dust collector, 3m+ stack above roof. Workers manually disassemble e-waste here.</div>
+</div>
+<div class="detail-panel" id="m1">
+<div class="grid-2">
+<div>
+<h3>What happens at this stage</h3>
+<p class="note">Workers use hand tools (screwdrivers, pliers, pneumatic drills) to separate an item into fractions: PCBs, plastics, metals, cables, batteries, hazardous parts. This is where 100% of incoming material first gets processed. A 5-table setup with 10 workers can dismantle ~1 tonne/day of mixed e-waste.</p>
+<p class="note" style="margin-top:8px"><strong>Why suction hoods matter:</strong> CPCB inspectors specifically check for dust extraction. Without it, you fail the CTE inspection. The cyclone collects fine dust (lead, cadmium particles from PCBs) before venting through the stack.</p>
+</div>
+<div>
+<h3>Specs (JewelTech)</h3>
+<p class="note">Size: 4' × 6' per table<br>Weight: ~210 kg each<br>All tables connect to shared suction pipe<br>Cyclone + 3m stack required (separate purchase)<br><strong>Ask dealer:</strong> Does Rs 55K include hood? Cyclone separate?<br><strong>You need:</strong> 5 tables minimum for 1T/day</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m2')">
+<div class="card-header">
+<div><strong>2. Shredder</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 8-15L (Indian) / Rs 5.5L (JewelTech listed)</div>
+</div>
+<div class="note">Twin-shaft or quad-shaft cutter that reduces dismantled fractions to 10-25mm pieces. This is the bottleneck machine — its throughput determines your CTO capacity.</div>
+</div>
+<div class="detail-panel" id="m2">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">Two counter-rotating shafts with interlocking blades grip and tear material. E-waste feeds from a hopper on top, shredded output drops below onto a conveyor. Output particle size is controlled by a screen mesh underneath — smaller mesh = finer output but slower throughput.</p>
+<p class="note" style="margin-top:8px"><strong>Critical nuance:</strong> Rated capacity is PEAK. Actual sustained throughput is typically 60-80% of rated. A "200 kg/hr" shredder really does 120-160 kg/hr with mixed e-waste. <em>Always ask for actual throughput data from existing installations.</em></p>
+</div>
+<div>
+<h3>JewelTech JJE S04 Specs</h3>
+<p class="note">Blade: D2 hardened steel<br>Motor: Crompton/ABB, 10-200 HP<br>Type: Dual shaft (Hex type) / Single<br>Output: 20-60-80mm<br>Capacity: 1-5 TPH (huge range — pin down exact model)<br>Weight: 1,200-14,000 kg<br>Auto reverse + auto forward<br><strong>YOUR TARGET:</strong> 200 kg/hr rated = ~125 kg/hr sustained = 1T/day at 8 hrs</p>
+<p class="note" style="margin-top:8px;color:var(--amber)"><strong>Power draw:</strong> 15-55 kW — this is your biggest single electricity consumer. At Rs 10/kWh, a 30kW shredder running 8 hrs = Rs 2,400/day just for this machine.</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m3')">
+<div class="card-header">
+<div><strong>3. Magnetic Separator</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 2-4L</div>
+</div>
+<div class="note">Overband magnet mounted above conveyor belt. Pulls out ferrous metals (iron, steel) from the shredded stream. First separation stage after shredding.</div>
+</div>
+<div class="detail-panel" id="m3">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">A powerful permanent magnet (ferrite or rare earth) sits inside a belt that runs perpendicular to the material conveyor. As shredded material passes underneath, ferrous pieces leap up and stick to the belt, which carries them sideways into a collection bin. Non-ferrous material continues forward on the main conveyor.</p>
+<p class="note" style="margin-top:8px"><strong>What it catches:</strong> Steel chassis pieces, iron screws/bolts, ferrous motor housings. This is your Fe certificate stream. E-waste has 5-30% ferrous content depending on category (LSEEW highest at ~25%).</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Type: Ferrite or Rare Earth magnet<br>Belt: Silicone & Rubber<br>Belt width: 400-800mm<br>Power: 1-2 kW (very low)<br>Operating height: up to 2 ft<br>Maintenance: Very low — magnets last 5-10 years<br><strong>Rated by:</strong> Belt width × belt speed × material depth</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m4')">
+<div class="card-header">
+<div><strong>4. Density Separator</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 2-5L</div>
+</div>
+<div class="note">Air gravity table that separates materials by density — heavy metals sink, light plastics float. Separates the remaining stream after magnetic and eddy current separation.</div>
+</div>
+<div class="detail-panel" id="m4">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">A vibrating inclined table with air blowing upward through tiny holes. Heavy materials (copper nuggets, metal fragments) stay on the table surface and travel one direction. Light materials (plastic, fiber) get lifted by the airflow and travel the other direction. Medium-density items go to a middle stream for re-processing.</p>
+<p class="note" style="margin-top:8px"><strong>Why it's non-negotiable:</strong> This is how you recover aluminum and copper from the non-ferrous stream. Without it, you're selling mixed non-ferrous scrap at Rs 150-200/kg instead of separated copper at Rs 700/kg.</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Production: 100-1000 kg/hr<br>Power: 3.1-11.1 kW<br>Weight: 450 kg<br>Dimensions: 36"×40"×55"<br>Application: Metal/non-metal/carbonaceous separation<br><strong>Rated by:</strong> Air volume and table area</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m5')">
+<div class="card-header">
+<div><strong>5. Eddy Current Separator</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 5-12L</div>
+</div>
+<div class="note">Uses rotating magnetic field to repel and eject non-ferrous metals (aluminium, copper, brass) from a mixed stream of plastic and metal. The key machine for Cu/Al certificate generation.</div>
+</div>
+<div class="detail-panel" id="m5">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">A high-speed rotor with alternating N-S magnets spins inside a conveyor belt drum. When non-ferrous metals pass over it, the rapidly changing magnetic field induces eddy currents in the metal, creating a temporary opposing magnetic field. This literally LAUNCHES the non-ferrous pieces forward off the conveyor, while plastic/glass/non-conductors simply fall off the end normally.</p>
+<p class="note" style="margin-top:8px"><strong>The physics matters:</strong> Aluminium gets ejected furthest (low density, high conductivity), copper less so (heavy but very conductive), stainless steel barely moves. Adjusting rotor speed and belt speed lets you tune the separation. 95%+ ferrous removal efficiency is standard.</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Capacity: up to 500 kg/hr<br>Power: 8 kW<br>Weight: 1,500 kg<br>Dimensions: 96"×48"×84"<br>Variable Frequency Drives for tuning<br>Application: E-waste, Li-ion battery, metal recycling<br><strong>Ask dealer:</strong> Rotor specs, belt width, rated kg/hr, separation purity %</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m6')">
+<div class="card-header">
+<div><strong>6. Conveyors</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 3-6L (set)</div>
+</div>
+<div class="note">Feed conveyors from shredder to separators, sorting conveyors for manual picking, and transfer conveyors between machines. The connective tissue of the plant.</div>
+</div>
+<div class="detail-panel" id="m6">
+<p class="note">You typically need 3-5 conveyor sections: (1) Feed to shredder, (2) Shredder output to magnetic separator, (3) Post-magnetic to eddy current, (4) Sorting/picking conveyor for manual quality check. Belt width should match your separator belt widths (typically 400-800mm). Speed is adjustable. Low power draw (~1-2 kW each).</p>
+<p class="note" style="color:var(--amber);margin-top:8px"><strong>CPCB inspection note:</strong> Material must flow ONE DIRECTION through the plant — intake on one side, dispatch on the other. No backtracking. Your conveyor layout enforces this.</p>
+</div>
+</div>
+
+<!-- Appliance Line -->
+<div class="tab-content" id="mach-appliance">
+<div class="callout">These 4 machines are triggered by CEEW category (fridges, ACs, washing machines) and large LSEEW items. They only cost Rs 4-14L combined but unlock 35%+ of kabadiwala intake. Without them, you reject most of what walks through your door.</div>
+
+<div class="card machine-card" onclick="toggleDetail('m7')">
+<div class="card-header">
+<div><strong>7. Compressor Cutting Machine</strong> <span class="badge badge-amber">CEEW TRIGGER</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 2-5L</div>
+</div>
+<div class="note">Cuts open sealed hermetic compressors from refrigerators and ACs to extract copper windings, iron body, and oil. Without this, fridge/AC compressors are un-processable scrap.</div>
+</div>
+<div class="detail-panel" id="m7">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">A circular saw or hydraulic press cuts the welded steel shell of the compressor in half. Inside you find: copper motor windings (high value, ~1-2 kg per compressor), iron stator, and compressor oil (hazardous, must be recovered). The worker extracts windings manually after cutting.</p>
+<p class="note" style="margin-top:8px"><strong>Economics:</strong> A single fridge compressor yields ~1.5 kg copper (Rs 1,050) + iron body. At Rs 30-50/kg input cost for whole fridges, the compressor alone often pays for the item.</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Compressor range: 15-55 cm length<br>Outer diameter: 12-26 cm<br>Power: 5-10 kW (3 phase)<br>Weight: 310 kg<br>Dimensions: 60"×36"×84"<br><strong>Throughput:</strong> Ask for compressors/hour — typically 15-30/hr</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m8')">
+<div class="card-header">
+<div><strong>8. Refrigerant Gas Recovery</strong> <span class="badge badge-amber">CEEW TRIGGER</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 1-3L</div>
+</div>
+<div class="note">Extracts CFC/HCFC/HFC refrigerant gases from AC and fridge cooling systems before compressor cutting. Mandatory environmental compliance — these are potent greenhouse gases.</div>
+</div>
+<div class="detail-panel" id="m8">
+<h3>JewelTech Specs</h3>
+<p class="note">Operating temp: 10-50°C<br>Recovery capacity: 200-350 g/min<br>Frequency: 50/60 Hz<br>Voltage: 110V<br>Size: 28"×30"×42" (portable unit)<br><strong>Process:</strong> Pierce the refrigerant line → connect recovery machine → pump gas into recovery cylinder → seal and store for certified disposal.<br><strong>Note:</strong> Recovered refrigerant must be sent to an authorized TSDF. You cannot vent it. CPCB checks logs of refrigerant quantities recovered vs. disposed.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m9')">
+<div class="card-header">
+<div><strong>9. Compressor Oil Recovery</strong> <span class="badge badge-amber">CEEW TRIGGER</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 0.5-2L</div>
+</div>
+<div class="note">Drills into compressor and drains oil before cutting. Oil is hazardous waste — must be stored separately and sent to authorized recycler.</div>
+</div>
+<div class="detail-panel" id="m9">
+<h3>JewelTech Specs</h3>
+<p class="note">Type: Bench drill with oil collection<br>Size: 24"×36"×32"<br>Simple mechanical device — drill hole in compressor, drain oil into collection drum. Low cost, low tech, but absolutely required for CEEW processing. Oil is classified as hazardous waste and must go to authorized waste oil recycler with manifest documentation.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m10')">
+<div class="card-header">
+<div><strong>10. CRT Cutting Machine</strong> <span class="badge badge-red">DECLINING RELEVANCE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 8-15L</div>
+</div>
+<div class="note">Hot-wire or diamond saw system to cut CRT (cathode ray tube) glass from old TVs and monitors. Separates leaded funnel glass from unleaded panel glass.</div>
+</div>
+<div class="detail-panel" id="m10">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">A nichrome wire is heated and wrapped around the CRT at the junction of the funnel and panel glass. Thermal shock cracks the glass cleanly along the wire. The two halves are separated — panel glass (recyclable, lead-free) and funnel glass (contains 20-25% lead oxide, hazardous). The phosphor coating inside is scraped off and treated as hazardous waste.</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Air pressure: 0.6-0.8 MPa<br>CRT range: 14-29 inches<br>Power: 2 kW<br>Capacity: 80-100 units/hour<br>Weight: 450 kg<br>Dimensions: 84"×48"<br><strong>Strategic call:</strong> CRT TVs are declining fast. Consider segregating CRTs and sending to another recycler initially rather than buying this machine for Day 1. Save Rs 8-15L upfront.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Specialized -->
+<div class="tab-content" id="mach-special">
+<div class="card machine-card" onclick="toggleDetail('m11')">
+<div class="card-header">
+<div><strong>11. Component Removing Machine (CRM)</strong> <span class="badge badge-blue">PCB VALUE UNLOCK</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 2-3L (JewelTech: Rs 2.75L)</div>
+</div>
+<div class="note">Heated rotating drum that melts solder to remove components (ICs, capacitors, resistors, connectors) from populated PCBs. Creates bare boards and a component stream.</div>
+</div>
+<div class="detail-panel" id="m11">
+<div class="grid-2">
+<div>
+<h3>How it works</h3>
+<p class="note">PCBs are loaded into a heated drum (~250-300°C). As the drum rotates, solder melts and components fall off through perforations. You get two outputs: (1) bare PCBs (high copper content, easier to shred and process), and (2) loose components (ICs contain gold-plated pins, capacitors contain palladium). The bare boards then go to the shredder → separator line.</p>
+<p class="note" style="margin-top:8px"><strong>Value add:</strong> Separated components can be sold to precious metal refiners at Rs 400-800/kg depending on type. The bare boards go through your mechanical line for copper recovery.</p>
+</div>
+<div>
+<h3>JewelTech Specs</h3>
+<p class="note">Type: Heating components<br>Material: Mild steel<br>Capacity: 150-1000 kg/day<br>Power: 1 kW (surprisingly low — heat is from gas/electric element)<br>Weight: 600 kg<br>Dimensions: 48"×48"×60"<br><strong>Purva price:</strong> Rs 2L at 150 kg/hr — verify if same capability</p>
+</div>
+</div>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m12')">
+<div class="card-header">
+<div><strong>12. Baling Machine / Hydraulic Press</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 7-13L (with weighbridge + scales)</div>
+</div>
+<div class="note">Compresses sorted metal fractions (iron, aluminium, copper) into dense bales for storage and transport. Also used for plastic baling.</div>
+</div>
+<div class="detail-panel" id="m12">
+<h3>JewelTech Specs</h3>
+<p class="note">Capacity: 50 kg/min<br>Max force: 0-30 MT<br>Control: CNC<br>Power: 5-10 kW<br>Weight: 1,800-6,000 kg<br>Available in horizontal and vertical configurations<br><strong>Why it matters for profitability:</strong> Baled metal sells for 10-15% more than loose scrap (easier to handle, transport, weigh accurately). Also reduces storage space by 3-5x. For a 500 sqm plant, space savings are critical.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m13')">
+<div class="card-header">
+<div><strong>13. Data Destruction (Degausser + HDD Crusher)</strong> <span class="badge badge-green">MUST HAVE for ITEW</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 3-5L (degausser) + Rs 2.75-6L (crusher/wiper)</div>
+</div>
+<div class="note">Mandatory for processing any IT equipment. Degausser erases magnetic media, physical crusher destroys hard drives. Corporate clients require certificates of destruction.</div>
+</div>
+<div class="detail-panel" id="m13">
+<p class="note"><strong>Degausser:</strong> Generates a powerful magnetic pulse that scrambles all data on magnetic media (HDDs, tapes). Takes ~10 seconds per drive. Cannot work on SSDs.<br><strong>HDD Crusher:</strong> Physical destruction — hydraulic press punches through the platters or shreds the entire drive. Works on both HDDs and SSDs.<br><strong>Data Wiping Software:</strong> For drives you want to resell as refurbished — software overwrites all data per DoD/NIST standards. Generates a wipe certificate per drive.</p>
+<p class="note" style="margin-top:8px;color:var(--green)"><strong>Revenue opportunity:</strong> Corporate IT disposal services charge Rs 50-200 per device for certified data destruction. If you process 1,000 corporate drives/month, that's Rs 50K-2L/month in data destruction fees ALONE, before any material recovery.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m14')">
+<div class="card-header">
+<div><strong>14. Furnace / Smelting Furnace</strong> <span class="badge badge-purple">STAGE 2 — GOLD RECOVERY</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 5-15L</div>
+</div>
+<div class="note">Melts copper/aluminium scrap into ingots. Required for generating Cu/Al ingot end-products (vs. just shreds). Also needed for precious metal recovery pathway.</div>
+</div>
+<div class="detail-panel" id="m14">
+<h3>JewelTech Smelting Furnace Specs</h3>
+<p class="note">Driven type: LPG fired<br>Voltage: 440 VAC<br>Applicable: Copper, Aluminium<br>Crucible: Silicon Carbide<br>Weight: 200-2,500 kg<br>Dimensions: 36"×36"×48"<br><strong>CPCB Annexure 1 #14:</strong> Listed as "Furnace and/or Smelting Furnace." Having this satisfies the requirement for metal end-product capability.<br><strong>Pollution control:</strong> Furnace operations REQUIRE upgraded APCD — 30m stack, scrubber, carbon filter. This alone can cost Rs 15-30L. Factor this into the decision to add a furnace.</p>
+<p class="note" style="margin-top:8px;color:var(--amber)"><strong>Strategic timing:</strong> Don't add furnace at Day 1. You can generate EPR certificates for Fe/Cu/Al from "shreds" — you don't need ingots. Add furnace when: (a) you have reliable PCB volume from corporate contracts, and (b) you want to move into gold recovery which requires smelting as a pre-step.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m15')">
+<div class="card-header">
+<div><strong>15. Precious Metal Recovery System</strong> <span class="badge badge-purple">STAGE 2 — THE ENDGAME</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 5.75L (JewelTech) + Rs 10-25L (hydromet) + Rs 5-12L (electrowinning)</div>
+</div>
+<div class="note">Pyro/hydro/electrometallurgical system for extracting gold, silver, palladium from PCBs. Only ~11 recyclers in India have this. The ultimate margin differentiator.</div>
+</div>
+<div class="detail-panel" id="m15">
+<p class="note"><strong>The process chain:</strong><br>1. <strong>Smelting</strong> — PCBs are melted in furnace to create a copper-rich matte containing precious metals<br>2. <strong>Chemical Leaching</strong> — Aqua regia or cyanide solution dissolves gold/silver from the matte<br>3. <strong>Precipitation</strong> — Chemical agents selectively precipitate gold out of solution<br>4. <strong>Electrowinning</strong> — Electric current plates pure gold/silver onto cathodes<br>5. <strong>Refining</strong> — Final purification to 99.5%+ purity</p>
+<p class="note" style="margin-top:8px"><strong>JewelTech Gold Extraction Machine (Rs 4.15L):</strong> Ask exactly what this covers. Likely just the leaching tank + basic precipitation. Full system needs: furnace (Rs 5-15L) + hydromet setup (Rs 10-25L) + electrowinning cells (Rs 5-12L) + upgraded APCD with scrubber + carbon filter (Rs 15-30L) + ETP upgrade to 5 KLD ZLD (Rs 10-20L) + fume hoods + lab equipment (Rs 3-8L).</p>
+<p class="note" style="color:var(--green);margin-top:8px"><strong>Total for gold capability:</strong> Rs 45L-1.25 Cr additional over Config 2 base. Justifiable when you have 500+ kg/month of PCBs from corporate sources. At 0.0004% gold recovery from PCBs, 1 tonne of server PCBs yields ~4g gold = Rs 30,000 in gold alone + the copper underneath.</p>
+</div>
+</div>
+
+<!-- Support Infrastructure -->
+<div class="tab-content" id="mach-support">
+<div class="card machine-card" onclick="toggleDetail('m16')">
+<div class="card-header">
+<div><strong>16. Wire Stripper / Wire Cutter / Wire Peeler</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 0.75L (JewelTech: Rs 75K)</div>
+</div>
+<div class="note">Strips insulation from cables to recover pure copper/aluminium wire. ~10% of kabadiwala intake is cables and wires.</div>
+</div>
+<div class="detail-panel" id="m16">
+<h3>JewelTech Specs</h3>
+<p class="note">Operating: Electric<br>Blade: 10 (Dia Steel D2)<br>Wire size: 1mm-40mm diameter, up to 120mm with attachments<br>Capacity: 150-200 kg/hr<br>Power: Single/Three Phase<br>Weight: 100-600 kg<br>Dimensions: 36"×24"×36"<br><strong>Economics:</strong> Cable at Rs 200-250/kg → stripped copper at Rs 700/kg + plastic insulation sold at Rs 15-25/kg. Simple 2.5-3x markup machine.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m17')">
+<div class="card-header">
+<div><strong>17. Tube Light / CFL Recycling</strong> <span class="badge badge-teal">COMPLIANCE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 1.75L</div>
+</div>
+<div class="note">Crushes fluorescent tubes/CFLs while capturing mercury vapor through carbon filter. Required if you accept lighting waste.</div>
+</div>
+<div class="detail-panel" id="m17">
+<h3>JewelTech Specs</h3>
+<p class="note">Feed rate: 20 lamps/minute<br>Motor: 1/6 HP, 220V<br>Vacuum: 5.5 amps (UL Listed)<br>Weight: 450 kg<br>Dimensions: 60"×36"×60"<br><strong>Note:</strong> Mercury is a controlled substance. You need carbon filter for vapor capture and sealed collection for the phosphor powder. Not high priority for Day 1 unless you specifically source tube lights/CFLs. A basic unit satisfies the CPCB checkbox for inspection.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m18')">
+<div class="card-header">
+<div><strong>18. Air Pollution Control Devices (APCD)</strong> <span class="badge badge-red">CRITICAL COMPLIANCE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 4-8L (basic) / Rs 15-30L (with furnace)</div>
+</div>
+<div class="note">Cyclone + bag house + alkaline scrubber + off-gas treatment + stack. Captures dust, fumes, and hazardous particles from all processing operations.</div>
+</div>
+<div class="detail-panel" id="m18">
+<p class="note"><strong>Basic APCD (no furnace):</strong> Cyclone dust collector (from dismantling tables) + bag filter (from shredder area) + 3m stack above roof. Rs 4-8L.<br><strong>Full APCD (with furnace):</strong> Everything above + alkaline scrubber + activated carbon filter + 30m stack. Rs 15-30L. The 30m stack alone can cost Rs 3-5L.<br><strong>CPCB inspection:</strong> They check stack height, emission monitoring port, and may take air quality readings. This is not optional — it's the #1 reason facilities fail CTE inspection.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m19')">
+<div class="card-header">
+<div><strong>19. ETP (Effluent Treatment Plant)</strong> <span class="badge badge-red">CRITICAL COMPLIANCE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 5-10L (2 KLD) / Rs 10-20L (5 KLD ZLD)</div>
+</div>
+<div class="note">Treats wastewater from processing (acid wash, cooling water, floor wash). Capacity in KLD (kilolitres/day). Must be adequate for your operations.</div>
+</div>
+<div class="detail-panel" id="m19">
+<p class="note"><strong>For Config 2 (no furnace):</strong> 2 KLD ETP with sludge drying bed is adequate. Handles floor wash water, dust suppression runoff, and minor process water. Rs 5-10L.<br><strong>For Config 4 (with gold recovery):</strong> 5 KLD with ZLD (Zero Liquid Discharge) preferred. Hydromet operations generate acid-contaminated wastewater that needs neutralization, precipitation, and evaporation. Rs 10-20L.<br><strong>Sludge:</strong> ETP sludge is hazardous waste — must go to authorized TSDF with manifests.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m20')">
+<div class="card-header">
+<div><strong>20. Weighbridge</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 2-4L</div>
+</div>
+<div class="note">Platform scale at intake zone to weigh incoming vehicles/material. Required for material flow tracking and EPR portal reporting.</div>
+</div>
+<div class="detail-panel" id="m20">
+<p class="note">Typically 10-30 tonne capacity. At 500 sqm, you likely use a platform scale (3m×3m) rather than a full truck weighbridge. Every incoming lot must be weighed, photographed, and lot-numbered. This data feeds into your material balance reporting on the EPR portal. CPCB/SPCB auditors verify material balance: input weight must approximately equal output weights across all fractions.</p>
+</div>
+
+<div class="card machine-card" onclick="toggleDetail('m21')">
+<div class="card-header">
+<div><strong>21. Weighing Machines / Equipment</strong> <span class="badge badge-green">MUST HAVE</span></div>
+<div style="font-size:12px;color:var(--text2)">Rs 0.5-1L</div>
+</div>
+<div class="note">Bench scales and floor scales at each processing stage for material flow tracking. Essential for EPR compliance and material balance reporting.</div>
+</div>
+<div class="detail-panel" id="m21">
+<p class="note">You need scales at: intake, post-dismantling (per fraction), post-shredding, post-separation (per metal), output/dispatch, and hazardous waste storage. Typically 3-5 bench scales (50-100 kg capacity) + 1-2 floor scales (500-1000 kg capacity). Digital with printout capability preferred for audit trail.</p>
+</div>
+</div>
+</div>
+
+<!-- =========== SECTION 2: THE PROCESSING FLOW =========== -->
+<h2>2. How Material Flows Through the Plant</h2>
+
+<div class="card" style="overflow-x:auto">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px">
+<div style="background:var(--card2);padding:8px 12px;border-radius:8px;border:1px solid var(--border);text-align:center;min-width:90px">
+<strong>INTAKE</strong><br>Weighbridge<br>Photography<br>Lot numbering
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:var(--card2);padding:8px 12px;border-radius:8px;border:1px solid var(--border);text-align:center;min-width:90px">
+<strong>RAW STORAGE</strong><br>Sorted by type<br>Batteries<br>separated
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(59,130,246,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--accent);text-align:center;min-width:90px">
+<strong>DISMANTLING</strong><br>5 tables<br>Manual separation<br>PCBs extracted
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(59,130,246,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--accent);text-align:center;min-width:90px">
+<strong>DATA DESTROY</strong><br>Degausser<br>HDD Crusher<br>(ITEW items)
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(245,158,11,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--amber);text-align:center;min-width:90px">
+<strong>SHREDDER</strong><br>10-25mm output<br>BOTTLENECK<br>= your CTO
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(34,197,94,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--green);text-align:center;min-width:90px">
+<strong>MAGNETIC SEP</strong><br>Fe extracted<br>→ Fe bales<br>→ Fe certificates
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(34,197,94,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--green);text-align:center;min-width:90px">
+<strong>EDDY CURRENT</strong><br>Cu/Al ejected<br>Plastic falls<br>→ Cu/Al certs
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:rgba(34,197,94,0.15);padding:8px 12px;border-radius:8px;border:1px solid var(--green);text-align:center;min-width:90px">
+<strong>DENSITY SEP</strong><br>Final Cu/Al split<br>Plastic sorted<br>→ Clean fractions
+</div>
+<div style="color:var(--text2)">→</div>
+<div style="background:var(--card2);padding:8px 12px;border-radius:8px;border:1px solid var(--border);text-align:center;min-width:90px">
+<strong>BALING</strong><br>Compress + bale<br>Weigh output<br>→ Dispatch
+</div>
+</div>
+<div class="note" style="margin-top:12px"><strong>Parallel streams:</strong> Appliance line (compressor cut → refrigerant recovery → oil recovery) runs in parallel. PCB line (CRM depopulation → PCB shredder) runs separately. Wire stripper handles cable fraction independently. All outputs merge at baling/dispatch.</div>
+</div>
+
+<!-- =========== SECTION 3: CONFIGURATIONS =========== -->
+<h2>3. Three Configurations That Matter</h2>
+<p class="note">From the 5 configurations in the dealer prep, three are the real decision points for you right now.</p>
+
+<div class="config-compare">
+<div class="config-col">
+<div class="config-title">MVP: Bare Minimum Recycler</div>
+<div style="font-size:11px;color:var(--text2);margin-bottom:8px">Config 1 from dealer prep</div>
+<div class="config-price">Rs 20-31L</div>
+<div class="callout-red" style="border-left:3px solid var(--red);background:rgba(239,68,68,0.08);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;margin-bottom:12px">
+⚠️ Probably INSUFFICIENT for CPCB recycler registration. No shredder, no mechanical separation.
+</div>
+<ul class="check-list">
+<li>Dismantling tables (4) + suction + cyclone</li>
+<li>Wire stripping machine</li>
+<li>Component Removing Machine</li>
+<li>Data wiping + degausser</li>
+<li>Baling press (10T)</li>
+<li>Weighbridge + scales</li>
+<li>Basic APCD + ETP</li>
+<li class="no">Shredder — NO</li>
+<li class="no">Magnetic separator — NO</li>
+<li class="no">Eddy current — NO</li>
+<li class="no">Density separator — NO</li>
+<li class="no">Appliance line — NO</li>
+</ul>
+<div class="note" style="margin-top:12px"><strong>Reality:</strong> This is essentially a dismantler with data destruction. You'd sell dismantled fractions to OTHER recyclers. You might get a dismantler authorization, not a recycler CTO. Without mechanical separation, CPCB may not consider this a "recycling" operation. <strong>Not recommended.</strong></div>
+</div>
+
+<div class="config-col recommended">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div class="config-title">MFP: Core Mechanical Recycler</div>
+<span class="badge badge-green">RECOMMENDED</span>
+</div>
+<div style="font-size:11px;color:var(--text2);margin-bottom:8px">Config 2 — The real Day 1 play</div>
+<div class="config-price">Rs 54L - 1.07 Cr (Indian) <span style="font-size:14px;color:var(--text2)">/ Rs 35-65L Chinese</span></div>
+<div class="callout-green" style="border-left:3px solid var(--green);background:rgba(34,197,94,0.08);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;margin-bottom:12px">
+Day 1 EPR recycler status. Self-sustaining at Rs 30-40/kg input cost. Generates Fe/Cu/Al certificates.
+</div>
+<ul class="check-list">
+<li>Dismantling tables (5) + suction + cyclone + 3m stack</li>
+<li>Twin-shaft shredder (200 kg/hr)</li>
+<li>Magnetic separator (overband)</li>
+<li>Eddy current separator</li>
+<li>Density separator (air table)</li>
+<li>Conveyors (feed + sorting)</li>
+<li>Component Removing Machine</li>
+<li>Wire stripper + data destruction</li>
+<li>Baling press (20T) + weighbridge + scales</li>
+<li>Compressor cutting + refrigerant + oil recovery</li>
+<li>Tube light crusher (basic)</li>
+<li>APCD (cyclone + bag filter + stack)</li>
+<li>ETP (2 KLD) + sludge bed</li>
+<li class="no">Furnace/smelting — NO (sell PCBs to refiners)</li>
+<li class="no">Precious metal recovery — NO (Stage 2)</li>
+</ul>
+<div class="note" style="margin-top:12px"><strong>This configuration:</strong> Processes ALL categories kabadiwala bring. Generates certificates for Fe, Cu, Al. Sells PCBs to gold refiners at Rs 250-600/kg. Satisfies every Annexure 1 item that doesn't require smelting/precious metal recovery. <strong>Target: 330 TPA CTO (1T/day, 8hrs, 1 shift).</strong></div>
+</div>
+
+<div class="config-col">
+<div class="config-title">Full Recycler + Gold</div>
+<div style="font-size:11px;color:var(--text2);margin-bottom:8px">Config 4 — The endgame (Stage 2)</div>
+<div class="config-price">Rs 1.5 - 3.5 Cr total</div>
+<div class="callout" style="padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;margin-bottom:12px">
+Add when corporate PCB volume justifies. Rs 45L-1.25 Cr over Config 2. Only ~11 recyclers in India have this.
+</div>
+<ul class="check-list">
+<li>Everything in Config 2</li>
+<li>Smelting / induction furnace (25-50 kg)</li>
+<li>Hydrometallurgy (leaching + precipitation)</li>
+<li>Electrowinning cells</li>
+<li>30m stack + upgraded APCD (scrubber + carbon filter)</li>
+<li>ETP upgrade (5 KLD, ZLD preferred)</li>
+<li>Fume hoods + lab equipment</li>
+</ul>
+<div class="note" style="margin-top:12px"><strong>Trigger point:</strong> When you have 500+ kg/month of PCBs from corporate sources and selling to refiners at Rs 250-600/kg feels like leaving money on the table. Gold certificates are the ultimate margin driver. But the APCD upgrade alone (30m stack + scrubber) can cost Rs 15-30L.</div>
+</div>
+</div>
+
+<!-- =========== SECTION 4: EPR CATEGORIES =========== -->
+<h2>4. Which EPR Categories Each Config Unlocks</h2>
+
+<div class="card">
+<table>
+<tr>
+<th>EEE Category</th>
+<th>Config 1 (MVP)</th>
+<th style="background:rgba(34,197,94,0.1)">Config 2 (MFP) ✓</th>
+<th>Config 4 (Gold)</th>
+<th>Extra Machinery Triggered</th>
+</tr>
+<tr>
+<td><strong>ITEW</strong> — IT & Telecom<br><span style="font-size:11px;color:var(--text2)">Laptops, phones, servers, printers</span></td>
+<td style="color:var(--amber)">Partial — dismantle only</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold recovery</td>
+<td>Data destruction (#13) mandatory</td>
+</tr>
+<tr class="highlight">
+<td><strong>CEEW</strong> — Consumer Electronics<br><span style="font-size:11px;color:var(--text2)">TVs, fridges, ACs, washing machines</span></td>
+<td style="color:var(--red)">Cannot process</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Compressor cut (#7), Refrigerant (#8), Oil (#9), CRT (#10)</td>
+</tr>
+<tr>
+<td><strong>LSEEW</strong> — Large & Small Equipment<br><span style="font-size:11px;color:var(--text2)">Fans, irons, mixers, dishwashers</span></td>
+<td style="color:var(--amber)">Small items only</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Large items may trigger #7/#8 (compressor)</td>
+</tr>
+<tr>
+<td><strong>EETW</strong> — Electrical Tools<br><span style="font-size:11px;color:var(--text2)">Drills, saws, sewing machines</span></td>
+<td style="color:var(--amber)">Partial</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Core 10 only — no special machinery</td>
+</tr>
+<tr>
+<td><strong>TLSEW</strong> — Toys & Leisure<br><span style="font-size:11px;color:var(--text2)">Electric toys, gaming, sports</span></td>
+<td style="color:var(--amber)">Partial</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Core 10 only</td>
+</tr>
+<tr>
+<td><strong>MDW</strong> — Medical Devices<br><span style="font-size:11px;color:var(--text2)">Dialysis, ventilators, lab equipment</span></td>
+<td style="color:var(--red)">Cannot process</td>
+<td style="color:var(--amber)">Mechanical only</td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Decontamination area required</td>
+</tr>
+<tr>
+<td><strong>LIW</strong> — Lab Instruments<br><span style="font-size:11px;color:var(--text2)">Measuring, control equipment</span></td>
+<td style="color:var(--amber)">Partial</td>
+<td style="color:var(--green)"><strong>Full processing</strong></td>
+<td style="color:var(--green)">Full + gold</td>
+<td>Core 10 only</td>
+</tr>
+</table>
+<div class="callout-blue" style="border-left:3px solid var(--accent);background:rgba(59,130,246,0.08);padding:10px 14px;border-radius:0 6px 6px 0;margin-top:12px;font-size:13px">
+<strong>Config 2 recommendation:</strong> Register for ITEW (all), CEEW (all), LSEEW (all), EETW (all), TLSEW (all), LIW (all). That covers 6 of 7 categories. Skip MDW initially (needs decontamination infrastructure). This maximizes your EPR certificate opportunity across the broadest possible waste stream.
+</div>
+</div>
+
+<!-- =========== SECTION 5: 500 SQM VIABILITY =========== -->
+<h2>5. Can Config 2 Fit in 500 sq m?</h2>
+
+<div class="grid-2">
+<div class="card">
+<h3>Space Budget (from Dealer Prep layout)</h3>
+<table>
+<tr><th>Zone</th><th>Required</th><th>What's Inside</th></tr>
+<tr><td>Intake Zone</td><td>~50 sqm</td><td>Weighbridge, logging, photography</td></tr>
+<tr><td>Raw Material Storage</td><td>~80 sqm</td><td>Sorted by type, batteries fire-rated separate</td></tr>
+<tr><td>Dismantling Area</td><td>~100 sqm</td><td>5 tables + suction hoods, 3m+ ceiling, PPE</td></tr>
+<tr><td>Data Destruction Room</td><td>~20 sqm</td><td>Secure, locked, degausser + crusher + wiping</td></tr>
+<tr><td>Mechanical Processing</td><td>~120 sqm</td><td>Shredder→conveyor→mag→eddy→density, 3-4m ceiling</td></tr>
+<tr><td>Appliance Line</td><td>~40 sqm</td><td>Compressor cut, refrigerant, oil recovery</td></tr>
+<tr><td>PCB Processing</td><td>~50 sqm</td><td>CRM + PCB line</td></tr>
+<tr><td>Output Storage</td><td>~60 sqm</td><td>Sorted metals, plastics, baling, dispatch</td></tr>
+<tr><td>APCD + ETP Zone</td><td>~50 sqm</td><td>Cyclone, bag filter, stack, ETP, sludge bed</td></tr>
+<tr><td>Admin + HW Storage</td><td>~50 sqm</td><td>Office, PPE, first aid, records, HW store</td></tr>
+<tr style="font-weight:700;border-top:2px solid var(--border)"><td>TOTAL</td><td>~620 sqm</td><td></td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>The Verdict</h3>
+<div class="stat-box" style="margin:12px 0;border-color:var(--amber)">
+<div class="stat-val" style="color:var(--amber)">500 sqm = TIGHT</div>
+<div class="stat-label">Need 620 sqm ideally for Config 2</div>
+</div>
+
+<div class="callout" style="margin:12px 0">
+<strong>Gap: ~120 sqm short.</strong> But there are options:
+</div>
+
+<p class="note"><strong>Option A: Compress the layout.</strong> Combine intake + admin (save 30 sqm). Stack APCD/ETP outdoors or semi-covered (save 20-30 sqm). Use vertical space — mezzanine floor for admin/storage over intake zone (recover 40 sqm). <strong>Gets you to ~510 sqm — feasible but zero expansion room.</strong></p>
+
+<p class="note" style="margin-top:10px"><strong>Option B: Use BOTH 500 sqm plots.</strong> If your two plots are adjacent or nearby: Plot 1 = intake + storage + dismantling + admin (~300 sqm). Plot 2 = mechanical processing + appliance + PCB + output + APCD/ETP (~320 sqm). <strong>Total 1000 sqm — comfortable for Config 2 with expansion room for Config 4.</strong></p>
+
+<p class="note" style="margin-top:10px"><strong>Option C: Rent a larger space.</strong> Industrial shed rental in Ghaziabad/Sahibabad: Rs 15-30/sqft/month. For 800 sqm (~8,600 sqft): Rs 1.3-2.6L/month. In Greater Noida: Rs 10-20/sqft. In Haridwar SIDCUL: Rs 8-15/sqft.</p>
+
+<p class="note" style="margin-top:10px;color:var(--green)"><strong>Recommended:</strong> Option B if plots are usable. Otherwise Option C — the Rs 1.5-2.5L/month rent is easily covered by processing even 20-30 tonnes/month at Rs 10-15K revenue per tonne.</p>
+</div>
+</div>
+
+<!-- =========== SECTION 6: ECONOMICS =========== -->
+<h2>6. Unit Economics — Config 2 at 330 TPA</h2>
+
+<div class="grid-3">
+<div class="stat-box">
+<div class="stat-val" style="color:var(--green)">330 TPA</div>
+<div class="stat-label">CTO Capacity (1T/day × 8hrs × 330 days)</div>
+</div>
+<div class="stat-box">
+<div class="stat-val">Rs 54L-1.07Cr</div>
+<div class="stat-label">Config 2 Capex (Indian machinery)</div>
+</div>
+<div class="stat-box">
+<div class="stat-val" style="color:var(--amber)">Rs 35-65L</div>
+<div class="stat-label">Config 2 Capex (Chinese mechanical line)</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Revenue Per Tonne (Mixed Kabadiwala E-Waste — ITEW/CEEW/LSEEW blend)</h3>
+<table>
+<tr><th>Revenue Stream</th><th>Yield/Tonne</th><th>Price</th><th>Revenue</th></tr>
+<tr><td>Copper (shreds/wire)</td><td>~40 kg</td><td>Rs 700/kg</td><td><strong>Rs 28,000</strong></td></tr>
+<tr><td>Aluminium (shreds)</td><td>~80 kg</td><td>Rs 175/kg</td><td><strong>Rs 14,000</strong></td></tr>
+<tr><td>Iron (bales)</td><td>~150 kg</td><td>Rs 28/kg</td><td><strong>Rs 4,200</strong></td></tr>
+<tr><td>PCBs (sold to refiners)</td><td>~30 kg</td><td>Rs 350/kg avg</td><td><strong>Rs 10,500</strong></td></tr>
+<tr><td>Plastic (sorted)</td><td>~280 kg</td><td>Rs 20/kg</td><td><strong>Rs 5,600</strong></td></tr>
+<tr><td>EPR Certificates (Cu+Al+Fe)</td><td>~270 kg metals</td><td>Rs 15-35/kg avg</td><td><strong>Rs 4,050-9,450</strong></td></tr>
+<tr style="font-weight:700;background:rgba(34,197,94,0.08)">
+<td colspan="3">TOTAL REVENUE PER TONNE</td>
+<td>Rs 66,350-71,750</td>
+</tr>
+</table>
+
+<h3 style="margin-top:16px">Cost Per Tonne</h3>
+<table>
+<tr><th>Cost Item</th><th>Per Tonne</th><th>Notes</th></tr>
+<tr><td>Raw material (mixed e-waste)</td><td>Rs 30,000-40,000</td><td>Kabadiwala lots at Rs 30-40/kg</td></tr>
+<tr><td>Labour (15 workers)</td><td>Rs 4,500</td><td>Rs 15K/worker/month ÷ 22 days ÷ 1T/day</td></tr>
+<tr><td>Electricity (80 kW × 8 hrs)</td><td>Rs 6,400</td><td>Rs 10/kWh industrial rate</td></tr>
+<tr><td>Rent (if applicable)</td><td>Rs 4,500-7,500</td><td>Rs 1.5-2.5L/month ÷ 22T/month</td></tr>
+<tr><td>Consumables (blades, belts, PPE)</td><td>Rs 2,000</td><td>Shredder blades Rs 20-80K/3-6 months</td></tr>
+<tr><td>Compliance (TSDF, testing, filing)</td><td>Rs 1,500</td><td>Hazardous waste disposal, lab tests</td></tr>
+<tr><td>Transport + logistics</td><td>Rs 2,000</td><td>Incoming and outgoing material movement</td></tr>
+<tr style="font-weight:700;background:rgba(239,68,68,0.08)">
+<td colspan="2">TOTAL COST PER TONNE</td>
+<td>Rs 50,900-63,900</td>
+</tr>
+</table>
+
+<div class="grid-2" style="margin-top:16px">
+<div class="stat-box" style="border-color:var(--green)">
+<div class="stat-val" style="color:var(--green)">Rs 7,850-15,450</div>
+<div class="stat-label">Gross Margin Per Tonne</div>
+</div>
+<div class="stat-box" style="border-color:var(--green)">
+<div class="stat-val" style="color:var(--green)">Rs 25.9L - 51L</div>
+<div class="stat-label">Annual Gross Profit at 330 TPA</div>
+</div>
+</div>
+
+<div class="callout-green" style="border-left:3px solid var(--green);background:rgba(34,197,94,0.08);padding:12px 16px;border-radius:0 8px 8px 0;margin-top:16px">
+<strong>Payback period:</strong> At Rs 80L capex (mid-range Config 2) and Rs 38L/year gross profit (mid-range), payback is approximately <strong>25 months</strong>. This improves significantly when you: (a) source cheaper material through direct corporate contracts, (b) increase utilization beyond 1 shift, or (c) add gold recovery in Stage 2.
+</div>
+</div>
+
+<!-- =========== SECTION 7: QUESTIONS FOR SUPPLIER =========== -->
+<h2>7. Key Questions for Ghaziabad Visit — Priority Order</h2>
+
+<div class="card">
+<h3>Understanding What You're Actually Buying</h3>
+<div class="note">
+<strong>Q1.</strong> For a 330 TPA CTO (1T/day, 8hrs), what SPECIFIC machines and specs do you recommend? Give me a complete bill of materials with individual prices.<br><br>
+<strong>Q2.</strong> What is the ACTUAL sustained throughput (not rated) of your shredder in kg/hr for mixed e-waste? Can you show data from an existing installation?<br><br>
+<strong>Q3.</strong> Which of the 21 CPCB Annexure 1 items do you NOT supply? (Likely: ETP, weighbridge, 30m furnace stack)<br><br>
+<strong>Q4.</strong> Do you supply a complete turnkey solution — layout planning + installation + commissioning + SPCB documentation support? Or just machines?<br><br>
+<strong>Q5.</strong> Which recycler clients of yours recently got CTO from Haryana/UP SPCB using your machines? Can I call them or visit their plant?
+</div>
+
+<h3 style="margin-top:16px">Space & Fit</h3>
+<div class="note">
+<strong>Q6.</strong> I have two 500 sqm plots. Can you design a layout for Config 2 that works? What's the minimum covered area needed for the mechanical line?<br><br>
+<strong>Q7.</strong> Ceiling height requirements — dismantling needs 3m+, shredder needs crane access (4-5m). Can this work in a standard industrial shed?
+</div>
+
+<h3 style="margin-top:16px">Chinese vs Indian Decision</h3>
+<div class="note">
+<strong>Q8.</strong> Do you resell Chinese integrated PCB lines (BSGH/Henan Doing type) with local support? What's the real price difference and trade-off?<br><br>
+<strong>Q9.</strong> Your PCB Recycling Plant at Rs 12.5L (Purva) — what does this include? Is it a complete integrated line? How does throughput compare to a Chinese BS-P300?
+</div>
+
+<h3 style="margin-top:16px">For JewelTech Specifically — Gold Recovery Reality</h3>
+<div class="note">
+<strong>Q10.</strong> Your Gold Extraction Machine at Rs 4.15L — what exactly is included? What's the recovery rate? What chemicals are needed and what's the monthly operating cost?<br><br>
+<strong>Q11.</strong> Your Precious Metal Refining System at Rs 5.75L — is this complete gold recovery? What's the capacity in grams/day of gold? What purity?
+</div>
+</div>
+
+<!-- =========== SECTION 8: RENTAL ECONOMICS =========== -->
+<h2>8. Rental Economics — If 500 sqm Plots Don't Work</h2>
+
+<div class="card">
+<table>
+<tr><th>Location</th><th>Rate (Rs/sqft/month)</th><th>800 sqm Monthly</th><th>Pros</th><th>Cons</th></tr>
+<tr><td><strong>Sahibabad, Ghaziabad</strong></td><td>Rs 20-35</td><td>Rs 1.7-3L</td><td>Close to Purva, NCR scrap market, Seelampur</td><td>Congested, pollution board strict</td></tr>
+<tr><td><strong>Greater Noida</strong></td><td>Rs 10-20</td><td>Rs 0.86-1.7L</td><td>Cheaper, newer industrial areas, UPPCB</td><td>Farther from Delhi scrap markets</td></tr>
+<tr><td><strong>Haridwar SIDCUL</strong></td><td>Rs 8-15</td><td>Rs 0.69-1.3L</td><td>Cheapest, Uttarakhand incentives possible</td><td>Far from NCR, limited local scrap supply</td></tr>
+<tr><td><strong>Manesar/Dharuhera, Haryana</strong></td><td>Rs 15-25</td><td>Rs 1.3-2.15L</td><td>Haryana SPCB, good highway access</td><td>Need Haryana-specific SPCB NOC process</td></tr>
+<tr><td><strong>Sonipat/Kundli, Haryana</strong></td><td>Rs 12-22</td><td>Rs 1.03-1.9L</td><td>Close to Delhi, Haryana, cheaper than Gzb</td><td>Mixed-use areas, check zoning</td></tr>
+</table>
+<div class="callout" style="margin-top:12px">
+<strong>Breakeven rent calculation:</strong> At 22 tonnes/month throughput and Rs 10K gross margin/tonne, you generate ~Rs 2.2L/month gross profit. This comfortably covers rent up to Rs 1.5-2L/month anywhere except premium Ghaziabad. <strong>Greater Noida or Sonipat offer the best economics vs. access trade-off.</strong>
+</div>
+</div>
+
+<!-- =========== SECTION 9: DECISION FRAMEWORK =========== -->
+<h2>9. Decision Framework for Your Visit</h2>
+
+<div class="card">
+<div class="grid-2">
+<div>
+<h3>Decide BEFORE the visit</h3>
+<div class="note">
+<strong>1. Config 2 is the play.</strong> Don't waste time on Config 1 (won't get recycler CTO) or Config 4 (too early for gold). Focus entirely on getting the best Config 2 quotes from both Purva and JewelTech.<br><br>
+<strong>2. Space decision.</strong> If your two 500 sqm plots can be used together, Config 2 fits with room to spare. If not, you're renting. Know your max monthly rent budget before discussing layout.<br><br>
+<strong>3. Indian vs Chinese mechanical line.</strong> Chinese integrated line (Rs 12-38L landed) vs Indian individual machines (Rs 25-45L for same capability). The Chinese line is cheaper and matched-throughput, but spare parts take 6-8 weeks and after-sales is remote. Indian gives you local support, especially from Purva in Sahibabad.
+</div>
+</div>
+<div>
+<h3>Decide AFTER the visit</h3>
+<div class="note">
+<strong>1. Actual prices.</strong> IndiaMART listings are inflated. Get real quotes with all ancillaries listed (installation, commissioning, conveyors, ducting — often "extra").<br><br>
+<strong>2. Reference calls.</strong> Get 2-3 recycler references who are actually operating with their machines. Call them. Ask: actual throughput, breakdown frequency, SPCB inspection experience, what they wish they'd known.<br><br>
+<strong>3. Timeline.</strong> Delivery + installation + commissioning. If it takes 3+ months, factor that into your CTE application timeline. You need machines installed before SPCB inspects for CTO.<br><br>
+<strong>4. Gold recovery reality.</strong> JewelTech's Gold Extraction (Rs 4.15L) and Precious Metal Refining (Rs 5.75L) — understand what's REALLY included. If it's just a leaching tank and a basic precipitation setup, the total gold pathway is still Rs 45L+.
+</div>
+</div>
+</div>
+</div>
+
+<div class="spacer"></div>
+<p class="note" style="text-align:center;color:var(--text2)">E-Waste Machinery Deep Dive — Prepared March 2026 for Ghaziabad Supplier Visit<br>Config 2 targeting 330 TPA | 500 sqm plot assessment | JewelTech + Purva Corporations</p>
+
+<script>
+function showMachGroup(group){
+document.querySelectorAll('#machTabs .tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('#machContent .tab-content').forEach(t=>t.classList.remove('active'));
+event.target.classList.add('active');
+document.getElementById('mach-'+group).classList.add('active');
+// Close all detail panels when switching tabs
+document.querySelectorAll('.detail-panel').forEach(d=>d.classList.remove('show'));
+}
+function toggleDetail(id){
+const el=document.getElementById(id);
+const wasOpen=el.classList.contains('show');
+// Close all panels first
+document.querySelectorAll('.detail-panel').forEach(d=>d.classList.remove('show'));
+if(!wasOpen) el.classList.add('show');
+}
+</script>
+
+</body>
+</html>

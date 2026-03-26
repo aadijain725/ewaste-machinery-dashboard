@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Waste EPR Categories → Machinery — Simple Guide</title>
+<style>
+  :root{--bg:#0f1117;--card:#1a1d27;--card2:#222533;--border:#2a2d3a;--text:#e4e4e7;--text2:#9ca3af;--accent:#3b82f6;--green:#22c55e;--amber:#f59e0b;--red:#ef4444}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 24px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #fff; }
+  .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+
+  /* Legend */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; font-size: 12px; color: var(--text2); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* Category Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--accent); }
+  .card-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .card-header:hover { background: var(--card2); }
+  .cat-code { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-right: 12px; }
+  .cat-title { font-size: 15px; font-weight: 600; flex: 1; }
+  .cat-epr { text-align: right; font-size: 13px; }
+  .cat-epr .max { font-size: 16px; font-weight: 700; }
+  .arrow { font-size: 18px; color: var(--text2); margin-left: 12px; transition: transform 0.2s; }
+  .card.open .arrow { transform: rotate(90deg); }
+
+  /* Priority colors */
+  .priority-1 .cat-code { background: rgba(245,158,11,0.13); color: var(--amber); }
+  .priority-1 .cat-epr .max { color: var(--amber); }
+  .priority-2 .cat-code { background: rgba(59,130,246,0.13); color: var(--accent); }
+  .priority-2 .cat-epr .max { color: var(--accent); }
+  .priority-3 .cat-code { background: rgba(156,163,175,0.13); color: var(--text2); }
+  .priority-3 .cat-epr .max { color: var(--text2); }
+  .priority-skip .cat-code { background: rgba(239,68,68,0.13); color: var(--red); }
+  .priority-skip .cat-epr .max { color: var(--red); }
+
+  /* Card body */
+  .card-body { display: none; padding: 0 20px 20px; }
+  .card.open .card-body { display: block; }
+
+  /* Two-column layout */
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .columns { grid-template-columns: 1fr; } }
+
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); margin-bottom: 8px; }
+
+  /* Items list */
+  .items { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 16px; }
+
+  /* Material bars */
+  .mat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .mat-label { font-size: 12px; color: var(--text2); width: 70px; text-align: right; }
+  .mat-bar { flex: 1; height: 18px; background: #1e2130; border-radius: 4px; overflow: hidden; position: relative; }
+  .mat-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: 10px; font-weight: 600; color: #fff; min-width: 24px; }
+  .mat-fill.copper { background: #c2410c; }
+  .mat-fill.aluminum { background: #9ca3af; }
+  .mat-fill.iron { background: #6b7280; }
+  .mat-fill.plastic { background: var(--green); }
+  .mat-fill.gold { background: var(--amber); }
+
+  /* Machinery */
+  .mach-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .mach-chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #1e2130; color: var(--text); border: 1px solid var(--border); }
+  .mach-chip.core { background: rgba(34,197,94,0.15); border-color: var(--green); color: #4ade80; }
+  .mach-chip.extra { background: #422006; border-color: #d97706; color: #fbbf24; }
+
+  .mach-note { font-size: 12px; color: #d97706; margin-top: 8px; font-style: italic; }
+
+  /* Flow diagram */
+  .flow { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 12px 0; }
+  .flow-step { font-size: 11px; padding: 5px 10px; background: #1e2130; border-radius: 6px; border: 1px solid var(--border); color: var(--text); white-space: nowrap; }
+  .flow-step.highlight { background: rgba(34,197,94,0.15); border-color: var(--green); color: #4ade80; }
+  .flow-arrow { color: var(--text2); font-size: 14px; }
+
+  /* Revenue box */
+  .rev-box { background: var(--card2); border-radius: 8px; padding: 12px 16px; margin-top: 12px; }
+  .rev-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .rev-row .val { font-weight: 600; }
+
+  /* Summary table */
+  .summary { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .summary th { text-align: left; padding: 8px 12px; background: var(--card); color: var(--text2); font-weight: 600; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .summary td { padding: 8px 12px; border-bottom: 1px solid #1e2130; }
+  .summary tr:hover td { background: var(--card2); }
+</style>
+</head>
+<body>
+
+<h1>EPR Categories → What You Process → What Machines You Need</h1>
+<p class="subtitle">For Aadi's Config 2 Mechanical Recycler · 330 TPA · Ghaziabad supplier meeting prep</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Essential (highest EPR value)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Recommended</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--text2)"></div> Supplementary</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Skip in Phase 1</div>
+  <div class="legend-item"><div class="mach-chip core" style="font-size:10px;padding:2px 6px">Green</div> = Core line handles it</div>
+  <div class="legend-item"><div class="mach-chip extra" style="font-size:10px;padding:2px 6px">Yellow</div> = Extra machine needed</div>
+</div>
+
+<!-- ITEW -->
+<div class="card priority-1" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">ITEW</span>
+    <span class="cat-title">IT & Telecom Equipment <span style="font-weight:400;color:var(--text2)">— 27 items</span></span>
+    <span class="cat-epr">EPR: ₹34K → <span class="max">₹1.12L/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">💻 Laptops, desktops, servers, phones, tablets, printers, scanners, routers, modems, UPS, inverters, fax machines, GPS</div>
+    <div class="columns">
+      <div>
+        <div class="section-label">Material Composition (per tonne)</div>
+        <div class="mat-row"><span class="mat-label">Copper</span><div class="mat-bar"><div class="mat-fill copper" style="width:40%">10-20%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Iron</span><div class="mat-bar"><div class="mat-fill iron" style="width:35%">15-20%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Plastic</span><div class="mat-bar"><div class="mat-fill plastic" style="width:55%">20-30%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Gold</span><div class="mat-bar"><div class="mat-fill gold" style="width:8%">250-300g</div></div></div>
+        <div class="rev-box">
+          <div class="section-label">Why it matters</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6">Highest EPR certificate value of any category. PCB-dense — laptops and phones have the richest PCBs. Corporate IT disposals = bulk supply. <strong style="color:var(--amber)">This is your money category.</strong></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Processing Flow</div>
+        <div class="flow">
+          <span class="flow-step highlight">Dismantling table</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Separate: batteries, screens, PCBs</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Shredder</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Magnetic sep</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Eddy current sep</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Sorted: Fe / Cu / Al / PCBs</span>
+        </div>
+        <div class="section-label" style="margin-top:16px">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Dismantling table</span>
+          <span class="mach-chip core">Shredder</span>
+          <span class="mach-chip core">Magnetic separator</span>
+          <span class="mach-chip core">Eddy current separator</span>
+          <span class="mach-chip core">Density separator</span>
+          <span class="mach-chip core">Conveyor</span>
+          <span class="mach-chip core">Bailing press</span>
+          <span class="mach-chip extra">Degausser / Data wiper</span>
+        </div>
+        <div class="mach-note">⚠ Data destruction is mandatory for corporate e-waste. PCBs sold to refiners at ~₹350/kg until you add gold recovery (Stage 2).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CEEW -->
+<div class="card priority-1" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">CEEW</span>
+    <span class="cat-title">Consumer Electronics & PV <span style="font-weight:400;color:var(--text2)">— 19 items</span></span>
+    <span class="cat-epr">EPR: ₹22K → <span class="max">₹74K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">📺 TVs (CRT/LCD/LED), refrigerators, ACs, washing machines, solar panels, radios, set-top boxes, monitors</div>
+    <div class="columns">
+      <div>
+        <div class="section-label">Material Composition (per tonne)</div>
+        <div class="mat-row"><span class="mat-label">Iron</span><div class="mat-bar"><div class="mat-fill iron" style="width:80%">~50%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Plastic</span><div class="mat-bar"><div class="mat-fill plastic" style="width:42%">~21%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Cu/Al</span><div class="mat-bar"><div class="mat-fill copper" style="width:26%">~13%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Glass</span><div class="mat-bar"><div class="mat-fill" style="width:30%;background:#60a5fa">5-25%</div></div></div>
+        <div class="rev-box">
+          <div class="section-label">Why it matters</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6">Your <strong>volume play</strong> — fridges, ACs, washing machines flow in bulk from kabadiwala channel. Heaviest iron content = good Fe certificates. <strong style="color:var(--red)">But triggers the most extra machines.</strong></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Processing Flow (varies by appliance)</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px"><strong style="color:#fbbf24">Fridges/ACs:</strong></div>
+        <div class="flow">
+          <span class="flow-step extra" style="background:#422006;border-color:#d97706;color:#fbbf24">Compressor cutter</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step extra" style="background:#422006;border-color:#d97706;color:#fbbf24">Refrigerant recovery</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step extra" style="background:#422006;border-color:#d97706;color:#fbbf24">Oil recovery</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Shredder → Sep line</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin:8px 0 4px"><strong style="color:#fbbf24">CRT TVs:</strong></div>
+        <div class="flow">
+          <span class="flow-step extra" style="background:#422006;border-color:#d97706;color:#fbbf24">CRT cutting machine</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Lead glass separated</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Shredder → Sep line</span>
+        </div>
+        <div class="section-label" style="margin-top:12px">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Core mechanical line</span>
+          <span class="mach-chip extra">Compressor cutter</span>
+          <span class="mach-chip extra">Refrigerant gas recovery</span>
+          <span class="mach-chip extra">Oil recovery</span>
+          <span class="mach-chip extra">CRT cutting machine</span>
+          <span class="mach-chip core">Wire stripper</span>
+        </div>
+        <div class="mach-note">⚠ CEEW triggers 4 extra machines (₹15-50L additional). Ask the supplier for the appliance sub-line quote separately.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LSEEW -->
+<div class="card priority-1" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">LSEEW</span>
+    <span class="cat-title">Large & Small Household Equipment <span style="font-weight:400;color:var(--text2)">— 34 items</span></span>
+    <span class="cat-epr">EPR: ₹10K → <span class="max">₹30K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">🔌 Fans, microwaves, vacuum cleaners, toasters, coffee machines, irons, clocks, watches, electric shavers, scales, smoke detectors</div>
+    <div class="columns">
+      <div>
+        <div class="section-label">Material Composition (per tonne)</div>
+        <div class="mat-row"><span class="mat-label">Iron</span><div class="mat-bar"><div class="mat-fill iron" style="width:90%">50-70%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Plastic</span><div class="mat-bar"><div class="mat-fill plastic" style="width:50%">15-30%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Copper</span><div class="mat-bar"><div class="mat-fill copper" style="width:16%">3-8%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Aluminum</span><div class="mat-bar"><div class="mat-fill aluminum" style="width:10%">2-5%</div></div></div>
+        <div class="rev-box">
+          <div style="font-size:13px;color:var(--text);line-height:1.6"><strong>Bread and butter.</strong> Biggest item count (34), easy mechanical processing. Steel-heavy, small PCBs. Lower EPR value but steady volume.</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Processing Flow</div>
+        <div class="flow">
+          <span class="flow-step highlight">Dismantling</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Remove capacitors, PCBs, cords</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Shredder</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Magnetic → Density → Eddy</span>
+        </div>
+        <div class="section-label" style="margin-top:16px">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Core mechanical line only</span>
+        </div>
+        <div class="mach-note" style="color:var(--green)">✅ No extra machines needed — your core Config 2 line handles everything.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EETW -->
+<div class="card priority-2" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">EETW</span>
+    <span class="cat-title">Electrical & Electronic Tools <span style="font-weight:400;color:var(--text2)">— 8 items</span></span>
+    <span class="cat-epr">EPR: ₹10K → <span class="max">₹30K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">🔧 Drills, saws, sewing machines, milling/grinding tools, riveting/nailing tools, welding/soldering, lawn mowers</div>
+    <div class="columns">
+      <div>
+        <div class="section-label">Material Composition (per tonne)</div>
+        <div class="mat-row"><span class="mat-label">Iron</span><div class="mat-bar"><div class="mat-fill iron" style="width:80%">40-60%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Copper</span><div class="mat-bar"><div class="mat-fill copper" style="width:30%">8-15%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Plastic</span><div class="mat-bar"><div class="mat-fill plastic" style="width:40%">15-25%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Aluminum</span><div class="mat-bar"><div class="mat-fill aluminum" style="width:18%">5-10%</div></div></div>
+        <div class="rev-box">
+          <div style="font-size:13px;color:var(--text);line-height:1.6"><strong style="color:var(--accent)">Hidden copper goldmine.</strong> Motor windings have 8-15% copper — double the rate of household items. Wire stripper pays for itself here.</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Processing Flow</div>
+        <div class="flow">
+          <span class="flow-step highlight">Dismantling</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Extract motors</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Wire stripper</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step highlight">Shred body → Sep line</span>
+        </div>
+        <div class="section-label" style="margin-top:16px">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Core mechanical line</span>
+          <span class="mach-chip core">Wire stripper/cutter</span>
+        </div>
+        <div class="mach-note" style="color:var(--green)">✅ Wire stripper is already in Config 2 — no extra cost.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TLSEW -->
+<div class="card priority-3" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">TLSEW</span>
+    <span class="cat-title">Toys, Leisure & Sports <span style="font-weight:400;color:var(--text2)">— 6 items</span></span>
+    <span class="cat-epr">EPR: ₹10K → <span class="max">₹25K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">🎮 Electric trains, car racing sets, handheld game consoles, video games, fitness computers, coin slot machines</div>
+    <div class="columns">
+      <div>
+        <div class="section-label">Material Composition (per tonne)</div>
+        <div class="mat-row"><span class="mat-label">Plastic</span><div class="mat-bar"><div class="mat-fill plastic" style="width:90%">50-70%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Iron</span><div class="mat-bar"><div class="mat-fill iron" style="width:30%">10-20%</div></div></div>
+        <div class="mat-row"><span class="mat-label">Copper</span><div class="mat-bar"><div class="mat-fill copper" style="width:8%">2-5%</div></div></div>
+      </div>
+      <div>
+        <div class="section-label">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Core mechanical line only</span>
+        </div>
+        <div class="mach-note" style="color:var(--green)">✅ No extra machines. Lowest EPR, low metal — register to widen your certificate net but don't chase this volume.</div>
+        <div class="mach-note">⚠ Watch for lithium batteries — need separate handling stream.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIW -->
+<div class="card priority-3" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">LIW</span>
+    <span class="cat-title">Laboratory Instruments <span style="font-weight:400;color:var(--text2)">— 2 items</span></span>
+    <span class="cat-epr">EPR: ₹15K → <span class="max">₹40K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">🔬 Laboratory monitoring instruments, laboratory control instruments</div>
+    <div class="columns">
+      <div>
+        <div style="font-size:13px;color:var(--text);line-height:1.6">Smallest category (2 items). Precision PCBs with possible specialty metals (platinum sensors). Similar processing to ITEW. Tiny volume but decent EPR rate — worth registering.</div>
+      </div>
+      <div>
+        <div class="section-label">Machines Needed</div>
+        <div class="mach-grid">
+          <span class="mach-chip core">Core mechanical line only</span>
+        </div>
+        <div class="mach-note">⚠ May contain mercury or hazardous chemicals — careful dismantling needed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MDW -->
+<div class="card priority-skip" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <span class="cat-code">MDW</span>
+    <span class="cat-title">Medical Devices <span style="font-weight:400;color:var(--text2)">— 10 items</span></span>
+    <span class="cat-epr">EPR: ₹20K → <span class="max">₹50K/T</span></span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="card-body">
+    <div class="items">🏥 Radiotherapy, cardiology, dialysis, ventilators, nuclear medicine, lab diagnostics, medical freezers</div>
+    <div style="background:rgba(239,68,68,0.13);border:1px solid var(--red);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#fca5a5;line-height:1.6">
+      <strong>SKIP IN PHASE 1.</strong> Requires biohazard decontamination infrastructure. Radiation equipment needs special protocols. Not worth the compliance overhead at 330 TPA scale. Revisit when you're at Config 4 scale.
+    </div>
+  </div>
+</div>
+
+<!-- Summary -->
+<div style="margin-top:32px">
+  <h2 style="font-size:18px;margin-bottom:12px">Quick Reference: What to ask the supplier</h2>
+  <table class="summary">
+    <tr><th>Category</th><th>Extra Machines Beyond Core Line</th><th>EPR Max/T</th><th>Priority</th></tr>
+    <tr><td><strong>ITEW</strong></td><td>Degausser/data wiper only</td><td style="color:var(--amber);font-weight:600">₹1,12,000</td><td>🟠 Essential</td></tr>
+    <tr><td><strong>CEEW</strong></td><td>Compressor cutter + refrigerant recovery + oil recovery + CRT cutter</td><td style="color:var(--amber);font-weight:600">₹74,000</td><td>🟠 Essential</td></tr>
+    <tr><td><strong>LSEEW</strong></td><td>None — core line only</td><td>₹30,000</td><td>🟠 Essential</td></tr>
+    <tr><td><strong>EETW</strong></td><td>None — wire stripper already in Config 2</td><td>₹30,000</td><td>🔵 Recommended</td></tr>
+    <tr><td><strong>TLSEW</strong></td><td>None — core line only</td><td>₹25,000</td><td>⚪ Supplementary</td></tr>
+    <tr><td><strong>LIW</strong></td><td>None — core line only</td><td>₹40,000</td><td>⚪ Supplementary</td></tr>
+    <tr><td style="color:var(--red)"><strong>MDW</strong></td><td style="color:var(--red)">Decontamination infrastructure — SKIP</td><td style="color:var(--red)">₹50,000</td><td>🔴 Skip</td></tr>
+  </table>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:16px">
+    <div style="font-size:14px;font-weight:600;margin-bottom:8px">💡 The key question for the supplier:</div>
+    <div style="font-size:14px;color:var(--text);line-height:1.6">
+      "Quote me two setups:<br>
+      <strong style="color:var(--green)">Setup A:</strong> Core mechanical line for ITEW + LSEEW + EETW + TLSEW + LIW (shredder → separators + dismantling + degausser + wire stripper + baler + APCD + ETP + weighbridge)<br>
+      <strong style="color:#fbbf24">Setup B:</strong> Setup A + appliance sub-line for CEEW (compressor cutter + refrigerant recovery + oil recovery + CRT cutter)<br><br>
+      This tells you the cost of adding CEEW processing on top of your base line.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

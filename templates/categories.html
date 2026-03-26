@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+
+<h2>EPR Categories — Metal Yields & Machinery Requirements</h2>
+
+{% for cat in categories %}
+<div class="card" id="{{ cat.id }}">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div>
+      <strong style="font-size:17px;color:#fff">{{ cat.name }}: {{ cat.full_name }}</strong>
+      <span style="margin-left:8px;font-size:12px;color:var(--text2)">{{ cat.codes }}</span>
+    </div>
+    <div style="text-align:right">
+      {% if cat.priority == 1 %}
+        <span class="badge badge-amber">Essential</span>
+      {% elif cat.priority == 2 %}
+        <span class="badge badge-blue">Recommended</span>
+      {% elif cat.priority == 3 %}
+        <span class="badge badge-purple">Supplementary</span>
+      {% else %}
+        <span class="badge badge-red">Skip Phase 1</span>
+      {% endif %}
+      <div style="font-size:13px;margin-top:4px">EPR: Rs {{ "{:,}".format(cat.epr_min_per_tonne) }} — <strong style="color:var(--green)">Rs {{ "{:,}".format(cat.epr_max_per_tonne) }}/T</strong></div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-bottom:12px">{{ cat.items }}</div>
+
+  <div class="grid-2">
+    <!-- Materials -->
+    <div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Material Composition (per tonne)</div>
+      {% for mat in cat.materials %}
+      {% set colors = {"gold": "#BA7517", "copper": "#c2410c", "aluminum": "#9ca3af", "iron": "#6b7280", "plastic": "#22c55e"} %}
+      {% set max_pcts = {"gold": 0.0004, "copper": 8, "aluminum": 11, "iron": 30, "plastic": 50} %}
+      <div class="bar-row">
+        <span class="bar-label">{{ mat.material|capitalize }}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:{{ (mat.pct / max_pcts.get(mat.material, 50) * 100)|int }}%;background:{{ colors.get(mat.material, 'var(--accent)') }}">
+            {{ mat.pct }}%
+          </div>
+        </div>
+        <span class="bar-val">
+          {% if mat.material == "gold" %}
+            {{ "%.1f"|format(mat.pct / 100 * 1000) }}g
+          {% elif mat.material != "plastic" %}
+            {{ (mat.pct / 100 * 1000)|int }}kg
+          {% endif %}
+        </span>
+      </div>
+      {% endfor %}
+      <div style="margin-top:10px;padding:10px;background:var(--card2);border-radius:8px;font-size:13px">
+        <strong>Revenue/T:</strong> <span style="color:var(--green)">Rs {{ "{:,.0f}".format(cat.revenue_per_tonne) }}</span>
+      </div>
+    </div>
+
+    <!-- Machines -->
+    <div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Machinery Required</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        {% for m in cat.machines %}
+        <span style="font-size:11px;padding:4px 10px;border-radius:6px;
+          {% if m.requirement == 'core' %}background:rgba(34,197,94,0.15);border:1px solid var(--green);color:#4ade80;
+          {% else %}background:rgba(245,158,11,0.15);border:1px solid var(--amber);color:#fbbf24;{% endif %}">
+          #{{ m.id }} {{ m.name[:25] }}
+        </span>
+        {% endfor %}
+      </div>
+      <div class="note"><strong>Trigger:</strong> {{ cat.machinery_trigger }}</div>
+      {% if cat.extra_machinery and cat.extra_machinery != 'None beyond core' %}
+      <div class="note" style="color:var(--amber)"><strong>Extra:</strong> {{ cat.extra_machinery }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:10px">{{ cat.notes }}</div>
+</div>
+{% endfor %}
+
+{% endblock %}

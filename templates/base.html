@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}E-Waste Plant{% endblock %} — Dashboard</title>
+<link rel="stylesheet" href="/static/style.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<h1><a href="/" style="color:#fff;text-decoration:none">E-Waste Plant Dashboard</a></h1>
+<p class="subtitle">Unit economics, machinery, and EPR category analysis — Config 2 · 330 TPA · Haryana/UP</p>
+<nav class="nav">
+{% for href, label in nav_items %}
+<a href="{{ href }}" class="{% if request.path == href %}active{% endif %}">{{ label }}</a>
+{% endfor %}
+</nav>
+{% block content %}{% endblock %}
+<div class="footer">
+E-Waste Recycling Plant Project — March 2026<br>
+Config 2 targeting 330 TPA | Haryana/UP
+</div>
+</body>
+</html>

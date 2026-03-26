@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Unit Economics{% endblock %}
+{% block content %}
+
+<h2>Unit Economics — Config 2 at 330 TPA</h2>
+
+<div class="stat-grid">
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--green)">330 TPA</div>
+    <div class="stat-label">CTO Capacity (1T/day x 330 days)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">Rs 54L-1.07Cr</div>
+    <div class="stat-label">Config 2 Capex (Indian)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val" style="color:var(--amber)">Rs 35-65L</div>
+    <div class="stat-label">Config 2 Capex (Chinese)</div>
+  </div>
+</div>
+
+<!-- Revenue -->
+<div class="card">
+  <h3>Revenue Per Tonne (Mixed Kabadiwala E-Waste)</h3>
+  <table>
+    <tr><th>Revenue Stream</th><th>Yield/Tonne</th><th>Price</th><th>Revenue</th></tr>
+    {% for r in revenue_items %}
+    <tr>
+      <td>{{ r.stream }}</td>
+      <td>{{ r.yield_per_tonne_kg }} kg</td>
+      <td>Rs {{ "{:,.0f}".format(r.price_per_kg) }}/kg</td>
+      <td><strong>Rs {{ "{:,.0f}".format(r.revenue_per_tonne) }}</strong></td>
+    </tr>
+    {% endfor %}
+    <tr style="font-weight:700;background:rgba(34,197,94,0.08)">
+      <td colspan="3">TOTAL REVENUE PER TONNE</td>
+      <td>Rs {{ "{:,.0f}".format(rev_total) }}</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Costs -->
+<div class="card">
+  <h3>Cost Per Tonne</h3>
+  <table>
+    <tr><th>Cost Item</th><th>Min (Rs)</th><th>Max (Rs)</th><th>Notes</th></tr>
+    {% for c in cost_items %}
+    <tr>
+      <td>{{ c.item }}</td>
+      <td>Rs {{ "{:,.0f}".format(c.cost_per_tonne_min) }}</td>
+      <td>Rs {{ "{:,.0f}".format(c.cost_per_tonne_max) }}</td>
+      <td class="note">{{ c.notes }}</td>
+    </tr>
+    {% endfor %}
+    <tr style="font-weight:700;background:rgba(239,68,68,0.08)">
+      <td>TOTAL COST PER TONNE</td>
+      <td>Rs {{ "{:,.0f}".format(cost_min) }}</td>
+      <td>Rs {{ "{:,.0f}".format(cost_max) }}</td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+<!-- Margins -->
+<div class="stat-grid">
+  <div class="stat-box" style="border-color:var(--green)">
+    <div class="stat-val" style="color:var(--green)">Rs {{ "{:,.0f}".format(rev_total - cost_max) }} — {{ "{:,.0f}".format(rev_total - cost_min) }}</div>
+    <div class="stat-label">Gross Margin Per Tonne</div>
+  </div>
+  <div class="stat-box" style="border-color:var(--green)">
+    <div class="stat-val" style="color:var(--green)">Rs {{ "{:,.0f}".format((rev_total - cost_max) * 330 / 100000) }}L — {{ "{:,.0f}".format((rev_total - cost_min) * 330 / 100000) }}L</div>
+    <div class="stat-label">Annual Gross Profit at 330 TPA</div>
+  </div>
+  <div class="stat-box" style="border-color:var(--amber)">
+    {% set mid_margin = ((rev_total - cost_max) + (rev_total - cost_min)) / 2 %}
+    {% set mid_annual = mid_margin * 330 %}
+    {% set payback = 80 / (mid_annual / 100000) * 12 %}
+    <div class="stat-val" style="color:var(--amber)">~{{ payback|int }} months</div>
+    <div class="stat-label">Payback at Rs 80L capex (mid-range)</div>
+  </div>
+</div>
+
+<div class="callout-green">
+  <strong>Payback improves with:</strong> (a) cheaper raw material via direct corporate contracts, (b) increased utilization beyond 1 shift, (c) gold recovery in Stage 2.
+</div>
+
+<!-- Interactive Calculator -->
+<div class="card">
+  <h3>Scenario Calculator</h3>
+  <p class="note">Adjust inputs to model different scenarios</p>
+  <div class="grid-3" style="margin-top:12px">
+    <div>
+      <label style="font-size:12px;color:var(--text2)">Raw Material Cost (Rs/kg)</label><br>
+      <input type="number" id="raw_cost" value="35" min="15" max="60" oninput="recalc()">
+    </div>
+    <div>
+      <label style="font-size:12px;color:var(--text2)">Daily Throughput (kg)</label><br>
+      <input type="number" id="throughput" value="1000" min="200" max="5000" step="100" oninput="recalc()">
+    </div>
+    <div>
+      <label style="font-size:12px;color:var(--text2)">Working Days/Year</label><br>
+      <input type="number" id="work_days" value="330" min="200" max="365" oninput="recalc()">
+    </div>
+  </div>
+  <div class="stat-grid" style="margin-top:12px">
+    <div class="stat-box">
+      <div class="stat-val" id="calc_rev" style="color:var(--green)">—</div>
+      <div class="stat-label">Revenue/Tonne</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="calc_cost" style="color:var(--red)">—</div>
+      <div class="stat-label">Cost/Tonne</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="calc_margin" style="color:var(--green)">—</div>
+      <div class="stat-label">Margin/Tonne</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="calc_annual" style="color:var(--green)">—</div>
+      <div class="stat-label">Annual Profit</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE_REV = {{ rev_total }};
+const BASE_OPEX = {{ cost_min + cost_max }}/ 2;  // mid-range total opex excluding raw material
+const RAW_MATERIAL_BASE = 35000;  // base Rs/tonne for raw material
+const OTHER_COSTS = BASE_OPEX - RAW_MATERIAL_BASE;  // non-raw-material costs
+
+function recalc() {
+  const rawCostKg = parseFloat(document.getElementById('raw_cost').value) || 35;
+  const throughput = parseFloat(document.getElementById('throughput').value) || 1000;
+  const workDays = parseFloat(document.getElementById('work_days').value) || 330;
+
+  const rawCostT = rawCostKg * 1000;
+  const totalCost = rawCostT + OTHER_COSTS;
+  const margin = BASE_REV - totalCost;
+  const tonnesYear = (throughput / 1000) * workDays;
+  const annual = margin * tonnesYear;
+
+  document.getElementById('calc_rev').textContent = 'Rs ' + Math.round(BASE_REV).toLocaleString();
+  document.getElementById('calc_cost').textContent = 'Rs ' + Math.round(totalCost).toLocaleString();
+  document.getElementById('calc_margin').textContent = 'Rs ' + Math.round(margin).toLocaleString();
+  document.getElementById('calc_margin').style.color = margin > 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('calc_annual').textContent = 'Rs ' + (annual / 100000).toFixed(1) + 'L';
+  document.getElementById('calc_annual').style.color = annual > 0 ? 'var(--green)' : 'var(--red)';
+}
+recalc();
+</script>
+
+<!-- Configurations -->
+<h2>Configuration Comparison</h2>
+<div class="grid-3">
+  {% for cfg in configs %}
+  <div class="card" style="{% if cfg.recommended %}border-color:var(--green){% endif %}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <strong>{{ cfg.name }}</strong>
+      {% if cfg.recommended %}<span class="badge badge-green">RECOMMENDED</span>{% endif %}
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:6px">{{ cfg.display_name }}</div>
+    <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:10px">Rs {{ cfg.price_min_lakhs }}L — {{ cfg.price_max_lakhs }}L</div>
+    <div class="note">{{ cfg.description }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Rental Economics -->
+<h2>Rental Economics</h2>
+<div class="card">
+  <table>
+    <tr><th>Location</th><th>Rate/sqft/mo</th><th>800 sqm Monthly</th><th>Pros</th><th>Cons</th></tr>
+    {% for r in rentals %}
+    <tr>
+      <td><strong>{{ r.location }}</strong></td>
+      <td>Rs {{ r.rate_min_psf }}-{{ r.rate_max_psf }}</td>
+      <td>Rs {{ r.monthly_800sqm_min_lakhs }}-{{ r.monthly_800sqm_max_lakhs }}L</td>
+      <td class="note">{{ r.pros }}</td>
+      <td class="note">{{ r.cons }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<!-- Space -->
+<h2>Space Requirements — Config 2</h2>
+<div class="card">
+  <table>
+    <tr><th>Zone</th><th>Required (sqm)</th><th>Contents</th></tr>
+    {% for z in zones %}
+    <tr>
+      <td><strong>{{ z.zone_name }}</strong></td>
+      <td>{{ z.required_sqm }}</td>
+      <td class="note">{{ z.contents }}</td>
+    </tr>
+    {% endfor %}
+    <tr style="font-weight:700;border-top:2px solid var(--border)">
+      <td>TOTAL</td>
+      <td>{{ total_sqm }}</td>
+      <td><span class="badge badge-amber">500 sqm = TIGHT (need {{ total_sqm }})</span></td>
+    </tr>
+  </table>
+</div>
+
+{% endblock %}

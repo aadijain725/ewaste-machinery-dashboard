@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Machines{% endblock %}
+{% block content %}
+
+<h2>21 CPCB Annexure 1 Machines</h2>
+<p class="note">CPCB mandates these as minimum machinery for a recycler. Not all needed for every category.</p>
+
+{% for grp in group_order %}
+{% set group = groups[grp] %}
+<h3 style="margin-top:24px">{{ group.label }}</h3>
+
+{% for m in group.machines %}
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div>
+      <strong>#{{ m.id }}. {{ m.name }}</strong>
+      <span class="badge
+        {% if 'MUST HAVE' in (m.badge or '') %}badge-green
+        {% elif 'TRIGGER' in (m.badge or '') or 'DECLINING' in (m.badge or '') %}badge-amber
+        {% elif 'STAGE' in (m.badge or '') or 'ENDGAME' in (m.badge or '') %}badge-purple
+        {% elif 'COMPLIANCE' in (m.badge or '') %}badge-red
+        {% else %}badge-blue{% endif %}"
+        style="margin-left:8px">{{ m.badge }}</span>
+    </div>
+    <div style="font-size:13px;color:var(--text2)">
+      Rs {{ m.price_min_lakhs }}L{% if m.price_min_lakhs != m.price_max_lakhs %} — {{ m.price_max_lakhs }}L{% endif %}
+    </div>
+  </div>
+
+  <div class="note">{{ m.description }}</div>
+
+  <div class="grid-2" style="margin-top:10px">
+    <div>
+      {% if m.power_kw_min %}
+      <div style="font-size:12px;color:var(--text2)">
+        Power: <strong style="color:var(--text)">{{ m.power_kw_min }}{% if m.power_kw_max and m.power_kw_max != m.power_kw_min %}-{{ m.power_kw_max }}{% endif %} kW</strong>
+      </div>
+      {% endif %}
+      {% if m.capacity %}
+      <div style="font-size:12px;color:var(--text2)">
+        Capacity: <strong style="color:var(--text)">{{ m.capacity }}</strong>
+      </div>
+      {% endif %}
+    </div>
+    <div>
+      <div class="note">{{ m.specs[:200] }}{% if m.specs|length > 200 %}...{% endif %}</div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endfor %}
+
+{% endblock %}
