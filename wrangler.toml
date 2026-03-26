@@ -1,0 +1,8 @@
+name = "gentle-salad-1911"
+compatibility_date = "2024-09-23"
+
+[build]
+command = "mkdir -p public/static && cp *.html public/ && cp static/style.css public/static/"
+
+[assets]
+directory = "./public"
